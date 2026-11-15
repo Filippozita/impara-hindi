@@ -8,7 +8,7 @@
 //
 // Se aggiungi o rinomini un file dell'app, aggiornalo nell'elenco FILE e cambia VERSIONE.
 
-const VERSIONE = 'v1';
+const VERSIONE = 'v2';
 const CACHE = 'impara-hindi-' + VERSIONE;
 const FILE = [
   './',

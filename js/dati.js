@@ -4,6 +4,7 @@
 import * as stato from './stato.js';
 
 let livelli = [];
+let glossario = {}; // parola traslitterata → significato italiano
 const vociPerId = new Map();
 const lezioniPerId = new Map();
 
@@ -15,6 +16,7 @@ export async function caricaContenuti() {
   if (!risposta.ok) throw new Error('Impossibile caricare i contenuti.');
   const dati = await risposta.json();
   livelli = Array.isArray(dati.livelli) ? dati.livelli : [];
+  glossario = dati.glossario && typeof dati.glossario === 'object' ? dati.glossario : {};
   vociPerId.clear();
   lezioniPerId.clear();
   for (const livello of livelli) {
@@ -69,3 +71,27 @@ export function lezioneSuccessiva(idLezione) {
 export const vociDaRipassareOggi = () => tutteLeVoci().filter((v) => stato.daRipassareOggi(v.id));
 export const vociInListaRipasso = () => tutteLeVoci().filter((v) => stato.inListaRipasso(v.id));
 export const vociImparate = () => tutteLeVoci().filter((v) => stato.leggiVoce(v.id).scatola >= stato.SCATOLA_IMPARATA);
+
+/** Divide un testo in parole, senza punteggiatura. */
+const inParole = (testo) => testo.replace(/[?!.,;:।]/g, ' ').trim().split(/\s+/).filter(Boolean);
+
+/**
+ * Scompone una frase parola per parola: [{ translit, it, devanagari }].
+ * Il significato viene dal campo "parole" della voce (se c'è) oppure dal glossario generale.
+ * Restituisce null per le voci di una sola parola o se non c'è nessun significato da mostrare.
+ */
+export function scomposizione(voce) {
+  const latine = inParole(voce.translit);
+  if (latine.length < 2) return null;
+  const hindi = inParole(voce.devanagari);
+  const pezzi = latine.map((parola, i) => {
+    const chiave = parola.toLowerCase();
+    return {
+      translit: parola,
+      it: (voce.parole && voce.parole[chiave]) || glossario[chiave] || '',
+      // L'audio della singola parola è disponibile solo se le due scritture hanno le stesse parole.
+      devanagari: hindi.length === latine.length ? hindi[i] : '',
+    };
+  });
+  return pezzi.some((p) => p.it) ? pezzi : null;
+}

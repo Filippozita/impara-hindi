@@ -20,6 +20,10 @@ const unico = (id, cosa) => {
   idVisti.add(id);
 };
 
+const glossario = dati.glossario || {};
+const inParole = (t) => String(t).toLowerCase().replace(/[?!.,;:]/g, ' ').trim().split(/\s+/).filter(Boolean);
+const senzaSignificato = new Set();
+
 let totale = 0;
 for (const livello of dati.livelli || []) {
   unico(livello.id, 'livello');
@@ -38,10 +42,18 @@ for (const livello of dati.livelli || []) {
       if (!['parola', 'frase'].includes(voce.tipo)) errori.push(`voce ${voce.id}: "tipo" deve essere "parola" o "frase"`);
       // Il devanagari non deve mai finire nei campi mostrati a schermo.
       if (DEVANAGARI.test(`${voce.it}${voce.translit}${voce.nota || ''}`)) errori.push(`voce ${voce.id}: devanagari in un campo visibile`);
+      // "Parola per parola": le due scritture devono avere le stesse parole, ognuna con un significato.
+      const latine = inParole(voce.translit || '');
+      if (latine.length > 1) {
+        if (inParole(voce.devanagari || '').length !== latine.length) errori.push(`voce ${voce.id}: translit e devanagari hanno un numero diverso di parole`);
+        for (const parola of latine) if (!glossario[parola] && !(voce.parole && voce.parole[parola])) senzaSignificato.add(parola);
+      }
       if (voce.devanagari && !DEVANAGARI.test(voce.devanagari)) errori.push(`voce ${voce.id}: il campo "devanagari" non contiene devanagari`);
     }
   }
 }
+
+if (senzaSignificato.size > 0) errori.push('parole senza significato nel "glossario": ' + [...senzaSignificato].join(', '));
 
 if (errori.length > 0) {
   console.error(`contenuti.json: ${errori.length} problemi\n- ` + errori.join('\n- '));

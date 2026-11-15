@@ -908,3 +908,48 @@ details summary {
     transition: none !important;
   }
 }
+
+/* ---------- Parola per parola ---------- */
+.scomposizione {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+.scomposizione-titolo {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--tenue);
+}
+.scomposizione-parole {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.4rem;
+}
+.parola {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.1rem;
+  min-height: 3.25rem;
+  max-width: 100%;
+  padding: 0.45rem 0.7rem;
+  border: 1px solid var(--bordo);
+  border-radius: 0.8rem;
+  background: var(--sfondo);
+}
+.parola:active {
+  background: var(--accento-tenue);
+}
+.parola-hi {
+  font: 700 1.1rem/1.2 Georgia, serif;
+  color: var(--accento);
+}
+.parola-it {
+  font-size: 0.82rem;
+  line-height: 1.25;
+  color: var(--testo);
+}

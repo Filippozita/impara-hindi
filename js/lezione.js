@@ -52,9 +52,36 @@ function cartaVoce(voce, { etichetta } = {}) {
     etichetta ? h('p', { class: 'carta-etichetta' }, etichetta) : null,
     h('p', { class: 'carta-it' }, voce.it),
     h('p', { class: 'carta-hi', lang: 'hi-Latn' }, voce.translit),
+    parolaPerParola(voce),
     voce.nota ? h('p', { class: 'carta-nota' }, voce.nota) : null,
     pulsantiAudio(voce),
     segnalibro(voce),
+  );
+}
+
+/**
+ * "Parola per parola": ogni parola della frase con il suo significato, nell'ordine hindi.
+ * Serve a capire come è costruita la frase e a comporne di nuove. Toccando una parola la si ascolta.
+ */
+function parolaPerParola(voce) {
+  const pezzi = dati.scomposizione(voce);
+  if (!pezzi) return null;
+  return h(
+    'div',
+    { class: 'scomposizione' },
+    h('p', { class: 'scomposizione-titolo' }, 'Parola per parola'),
+    h(
+      'div',
+      { class: 'scomposizione-parole' },
+      ...pezzi.map((p) =>
+        h(
+          'button',
+          { class: 'parola', type: 'button', 'aria-label': `${p.translit}: ${p.it || 'significato non indicato'}. Tocca per ascoltare`, onclick: () => parla(p.devanagari) },
+          h('span', { class: 'parola-hi', lang: 'hi-Latn' }, p.translit),
+          h('span', { class: 'parola-it' }, p.it || '—'),
+        ),
+      ),
+    ),
   );
 }
 

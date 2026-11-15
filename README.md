@@ -62,6 +62,7 @@ Regole:
 - `translit` segue lo schema della schermata "Come si legge" (vocali lunghe doppie: `aa`, `ii`, `uu`).
 - Facoltativo: `"alternative": ["21"]` elenca altri testi accettati dall'esercizio di pronuncia (utile per i numeri, che il riconoscimento vocale scrive spesso in cifre).
 - Dove la frase cambia tra uomo e donna, si usa la forma maschile e lo si dice nella `nota`.
+- **Parola per parola.** Sotto ogni frase l'app mostra il significato di ciascuna parola, preso dal `glossario` in cima a `contenuti.json` (`"sab": "tutto"`). Se una frase nuova contiene parole che non ci sono ancora, aggiungile lì: valgono poi per tutte le frasi. Se in una frase una parola ha un senso diverso dal solito, lo si indica solo per quella voce con `"parole": { "kyaa": "(apre una domanda sì/no)" }`. Translit e devanagari devono avere lo stesso numero di parole, nello stesso ordine.
 - Un nuovo livello va aggiunto in fondo a `livelli`: si sblocca quando il precedente è almeno all'80%.
 
 Poi:
