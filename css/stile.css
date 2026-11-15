@@ -1,43 +1,52 @@
-/* stile.css — pensato prima per il telefono: bersagli grandi, azioni in basso (a portata
-   di pollice), tema chiaro e scuro. I colori sono variabili: si cambiano tutti da qui. */
+/* stile.css — l'aspetto di tutta l'app.
+   Pensato per il telefono: bersagli grandi, azioni in basso (a portata di pollice), chiaro e scuro.
+   Identità: indaco e calendula, con il rosa "rani" per le parole hindi, come nelle stoffe stampate
+   a mano; il bordo a righe in cima alle carte è l'unico elemento decorativo.
+   I colori sono variabili: si cambiano tutti da qui. */
 
 /* ---------- Colori ---------- */
 :root {
-  --sfondo: #faf5ec;
+  --sfondo: #f4f3fb; /* bianco appena tinto d'indaco */
   --carta: #ffffff;
-  --testo: #221c2e;
-  --tenue: #6b6478;
-  --bordo: #e7dfd0;
-  --accento: #c2500a; /* zafferano */
-  --accento-testo: #ffffff;
-  --accento-tenue: #fbe9db;
-  --forte: #2e2466; /* indaco */
+  --testo: #1b1740;
+  --tenue: #625d86;
+  --bordo: #dedbee;
+  --azione: #f6a609; /* calendula: i pulsanti principali */
+  --azione-ombra: #b97700;
+  --azione-testo: #1b1740;
+  --accento: #b4155c; /* rosa rani: le parole hindi, i link */
+  --accento-tenue: #fbe4ee;
+  --su-accento: #ffffff;
+  --forte: #1e1a4d; /* indaco */
   --forte-testo: #ffffff;
-  --ok: #1e7b4d;
-  --ok-sfondo: #e3f4ea;
+  --ok: #0b7a66;
+  --ok-sfondo: #dcf3ee;
   --no: #b3261e;
   --no-sfondo: #fbe6e4;
-  --incerto: #855600;
-  --incerto-sfondo: #fff0cc;
-  --ombra: 0 1px 2px rgba(34, 28, 46, 0.06), 0 6px 18px rgba(34, 28, 46, 0.06);
+  --incerto: #7a5200;
+  --incerto-sfondo: #fdeec6;
+  --ombra: 0 1px 2px rgba(30, 26, 77, 0.06), 0 8px 22px rgba(30, 26, 77, 0.07);
   color-scheme: light;
 }
 
 /* Tema scuro: automatico (se il telefono è in scuro e non hai scelto "chiaro")… */
 @media (prefers-color-scheme: dark) {
   :root:not([data-tema='chiaro']) {
-    --sfondo: #14121b;
-    --carta: #201d2a;
-    --testo: #f3eee6;
-    --tenue: #a9a2b8;
-    --bordo: #34303f;
-    --accento: #ff9a4a;
-    --accento-testo: #1b1206;
-    --accento-tenue: #3a2513;
-    --forte: #3a2f85;
+    --sfondo: #100e25;
+    --carta: #1b1839;
+    --testo: #f1eeff;
+    --tenue: #a9a3cf;
+    --bordo: #2f2b57;
+    --azione: #ffb627;
+    --azione-ombra: #a86f00;
+    --azione-testo: #1b1740;
+    --accento: #ff7db0;
+    --accento-tenue: #3a1830;
+    --su-accento: #1b1740;
+    --forte: #2b2670;
     --forte-testo: #ffffff;
-    --ok: #6fd39b;
-    --ok-sfondo: #153324;
+    --ok: #5fd3b8;
+    --ok-sfondo: #10332d;
     --no: #ff8f86;
     --no-sfondo: #3a1a18;
     --incerto: #f2c15c;
@@ -48,18 +57,21 @@
 }
 /* …oppure scelto a mano in Altro → Tema. */
 :root[data-tema='scuro'] {
-  --sfondo: #14121b;
-  --carta: #201d2a;
-  --testo: #f3eee6;
-  --tenue: #a9a2b8;
-  --bordo: #34303f;
-  --accento: #ff9a4a;
-  --accento-testo: #1b1206;
-  --accento-tenue: #3a2513;
-  --forte: #3a2f85;
+  --sfondo: #100e25;
+  --carta: #1b1839;
+  --testo: #f1eeff;
+  --tenue: #a9a3cf;
+  --bordo: #2f2b57;
+  --azione: #ffb627;
+  --azione-ombra: #a86f00;
+  --azione-testo: #1b1740;
+  --accento: #ff7db0;
+  --accento-tenue: #3a1830;
+  --su-accento: #1b1740;
+  --forte: #2b2670;
   --forte-testo: #ffffff;
-  --ok: #6fd39b;
-  --ok-sfondo: #153324;
+  --ok: #5fd3b8;
+  --ok-sfondo: #10332d;
   --no: #ff8f86;
   --no-sfondo: #3a1a18;
   --incerto: #f2c15c;
@@ -111,7 +123,7 @@ button {
 #app {
   max-width: 34rem;
   margin: 0 auto;
-  padding: calc(1rem + env(safe-area-inset-top)) 1rem calc(6rem + env(safe-area-inset-bottom));
+  padding: 1rem 1rem calc(6.5rem + env(safe-area-inset-bottom));
   display: flex;
   flex-direction: column;
   gap: 0.9rem;
@@ -134,6 +146,9 @@ body.tutto-schermo #nav {
   opacity: 0;
   pointer-events: none;
 }
+.centrato {
+  text-align: center;
+}
 
 .icona {
   display: inline-flex;
@@ -152,11 +167,17 @@ body.tutto-schermo #nav {
   justify-content: space-between;
   align-items: center;
   gap: 1rem;
-  padding: 0.4rem 0.1rem 0.2rem;
+  padding: 0.5rem 0.1rem 0.1rem;
 }
 .testa h1 {
-  font: 700 1.9rem/1.1 Georgia, 'Times New Roman', serif;
-  letter-spacing: -0.01em;
+  font-size: 2.1rem;
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+}
+.testa .sotto {
+  margin-top: 0.3rem;
+  font-size: 1rem;
 }
 .sotto {
   color: var(--tenue);
@@ -166,32 +187,135 @@ body.tutto-schermo #nav {
   color: var(--tenue);
   font-size: 0.9rem;
 }
+/* Etichette piccole sopra un contenuto: in grassetto, senza maiuscoletto. */
 .etichetta,
 .carta-etichetta {
-  font-size: 0.74rem;
+  font-size: 0.85rem;
   font-weight: 700;
-  letter-spacing: 0.09em;
-  text-transform: uppercase;
   color: var(--accento);
 }
 .titolo-sezione {
-  font-size: 1.05rem;
+  font-size: 1.1rem;
+  font-weight: 800;
   margin: 0.4rem 0 0.2rem;
 }
 
-.serie {
+/* ---------- Striscia dei progressi, sempre in alto ---------- */
+#striscia {
+  position: sticky;
+  top: 0;
+  z-index: 5;
   display: flex;
   align-items: center;
-  gap: 0.3rem;
-  padding: 0.45rem 0.75rem;
-  border-radius: 999px;
-  background: var(--accento-tenue);
-  color: var(--accento);
-  font-size: 0.85rem;
-  white-space: nowrap;
+  gap: 0.75rem;
+  max-width: 34rem;
+  margin: 0 auto;
+  padding: calc(0.55rem + env(safe-area-inset-top)) 1rem 0.55rem;
+  background: var(--forte);
+  color: var(--forte-testo);
+  text-decoration: none;
+  font-size: 0.78rem;
 }
-.serie strong {
-  font-size: 1.05rem;
+#striscia:empty {
+  display: none;
+}
+/* Durante una lezione la striscia resta visibile ma non porta via dalla lezione. */
+body.tutto-schermo #striscia {
+  pointer-events: none;
+}
+.striscia-pezzo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  flex: none;
+  color: var(--azione);
+  font-weight: 800;
+  font-size: 0.95rem;
+}
+.striscia-pezzo .icona {
+  width: 1.05rem;
+  height: 1.05rem;
+}
+.striscia-centro {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.28rem;
+}
+.striscia-testo {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: rgba(255, 255, 255, 0.75);
+}
+.striscia-testo strong {
+  color: #ffffff;
+}
+.barra-doppia {
+  position: relative;
+  display: block;
+  height: 0.4rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.18);
+  overflow: hidden;
+}
+.barra-doppia span {
+  position: absolute;
+  inset: 0 auto 0 0;
+  border-radius: 999px;
+  transition: width 0.3s ease;
+}
+.barra-studiate {
+  background: var(--azione);
+  opacity: 0.45;
+}
+.barra-imparate {
+  background: var(--azione);
+}
+
+/* ---------- La settimana (home) ---------- */
+.settimana {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.3rem;
+  padding: 0.2rem 0;
+}
+.giorno {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+}
+.giorno-punto {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.3rem;
+  height: 2.3rem;
+  border-radius: 50%;
+  border: 2px solid var(--bordo);
+  color: var(--azione-testo);
+}
+.giorno-punto .icona {
+  width: 1.2rem;
+  height: 1.2rem;
+}
+.giorno.attivo .giorno-punto {
+  background: var(--azione);
+  border-color: var(--azione);
+}
+.giorno.oggi:not(.attivo) .giorno-punto {
+  border-color: var(--accento);
+  border-style: dashed;
+}
+.giorno-nome {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--tenue);
+}
+.giorno.oggi .giorno-nome {
+  color: var(--testo);
 }
 
 /* ---------- Schede ---------- */
@@ -199,26 +323,42 @@ body.tutto-schermo #nav {
   display: flex;
   flex-direction: column;
   gap: 0.6rem;
-  padding: 1.1rem;
+  padding: 1.15rem;
   background: var(--carta);
   border: 1px solid var(--bordo);
-  border-radius: 1.1rem;
+  border-radius: 1.25rem;
   box-shadow: var(--ombra);
 }
 .scheda h2 {
   font-size: 1.3rem;
+  font-weight: 800;
   line-height: 1.2;
+  letter-spacing: -0.01em;
 }
 .scheda-forte {
   background: var(--forte);
   color: var(--forte-testo);
   border-color: transparent;
+  padding: 1.4rem 1.2rem 1.3rem;
+}
+.scheda-forte h2 {
+  font-size: 1.7rem;
 }
 .scheda-forte .etichetta {
-  color: #ffc48f;
+  color: var(--azione);
 }
 .scheda-forte .sotto {
   color: rgba(255, 255, 255, 0.78);
+  margin-bottom: 0.4rem;
+}
+.scheda-riga {
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.9rem;
+}
+.scheda-riga h2 {
+  font-size: 1.1rem;
 }
 .scheda.vuota {
   text-align: center;
@@ -236,16 +376,18 @@ body.tutto-schermo #nav {
   display: flex;
   flex-direction: column;
 }
+.scheda-link > .icona {
+  color: var(--tenue);
+}
 .bloccata {
-  opacity: 0.7;
+  opacity: 0.65;
 }
 
 .banner {
   padding: 0.85rem 1rem;
-  border-radius: 0.9rem;
+  border-radius: 1rem;
   background: var(--incerto-sfondo);
   color: var(--testo);
-  border: 1px solid var(--incerto);
   font-size: 0.93rem;
 }
 .banner summary {
@@ -254,7 +396,6 @@ body.tutto-schermo #nav {
 }
 .banner-ok {
   background: var(--ok-sfondo);
-  border-color: var(--ok);
 }
 .passi {
   list-style: decimal;
@@ -276,30 +417,37 @@ details summary {
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  min-height: 3.5rem;
+  min-height: 3.6rem;
   width: 100%;
   padding: 0.7rem 1.1rem;
   border: 2px solid transparent;
-  border-radius: 1rem;
-  font-weight: 700;
-  font-size: 1.05rem;
+  border-radius: 1.1rem;
+  font-weight: 800;
+  font-size: 1.08rem;
   background: var(--carta);
   transition: transform 0.08s ease;
 }
 .btn:active {
-  transform: scale(0.98);
+  transform: translateY(2px);
 }
+/* Il pulsante principale ha un bordo inferiore più scuro: sembra un tasto da premere. */
 .btn-primario {
-  background: var(--accento);
-  color: var(--accento-testo);
+  background: var(--azione);
+  color: var(--azione-testo);
+  box-shadow: 0 4px 0 var(--azione-ombra);
+}
+.btn-primario:active {
+  box-shadow: 0 2px 0 var(--azione-ombra);
 }
 .btn-secondario {
-  background: transparent;
+  background: var(--carta);
   border-color: var(--bordo);
 }
-.btn-chiaro {
-  background: #ffffff;
-  color: #2e2466;
+.btn-stretto {
+  width: auto;
+  flex: none;
+  min-height: 3.2rem;
+  padding-inline: 1.3rem;
 }
 .btn-pericolo {
   background: transparent;
@@ -312,7 +460,7 @@ details summary {
   min-height: 2.75rem;
   padding: 0.4rem 0.2rem;
   color: var(--accento);
-  font-weight: 600;
+  font-weight: 700;
   text-align: left;
 }
 .btn-testo.indietro {
@@ -344,7 +492,7 @@ details summary {
 .btn-audio {
   background: var(--accento-tenue);
   color: var(--accento);
-  min-height: 3.25rem;
+  min-height: 3.3rem;
 }
 .btn-lento {
   background: transparent;
@@ -386,20 +534,22 @@ details summary {
 
 .segmenti {
   display: flex;
-  border: 1px solid var(--bordo);
-  border-radius: 0.9rem;
-  overflow: hidden;
+  padding: 0.25rem;
+  gap: 0.25rem;
+  background: var(--sfondo);
+  border-radius: 1rem;
 }
 .segmenti button {
   flex: 1;
-  min-height: 3rem;
+  min-height: 2.9rem;
   border: none;
+  border-radius: 0.8rem;
   background: transparent;
-  font-weight: 600;
+  font-weight: 700;
 }
 .segmenti button[aria-pressed='true'] {
-  background: var(--accento);
-  color: var(--accento-testo);
+  background: var(--forte);
+  color: var(--forte-testo);
 }
 
 /* ---------- Barre e numeri ---------- */
@@ -412,14 +562,14 @@ details summary {
 .barra-piena {
   height: 100%;
   border-radius: 999px;
-  background: var(--accento);
+  background: var(--azione);
   transition: width 0.3s ease;
 }
-.scheda-forte .barra-piena {
-  background: #ffc48f;
-}
 .numero {
-  font: 700 2.4rem/1 Georgia, serif;
+  font-size: 2.4rem;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.03em;
 }
 .riga-numero {
   display: flex;
@@ -438,7 +588,7 @@ details summary {
   padding: 1rem;
   background: var(--carta);
   border: 1px solid var(--bordo);
-  border-radius: 1.1rem;
+  border-radius: 1.25rem;
   box-shadow: var(--ombra);
 }
 .riga-livello {
@@ -463,21 +613,78 @@ details summary {
   gap: 0.25rem;
 }
 .scatola-n {
-  font-weight: 700;
+  font-weight: 800;
 }
 .scatola-colonna {
   height: 5rem;
   display: flex;
   align-items: flex-end;
   background: var(--sfondo);
-  border-radius: 0.5rem;
+  border-radius: 0.6rem;
   overflow: hidden;
 }
 .scatola-colonna div {
   width: 100%;
   min-height: 3px;
-  background: var(--accento);
-  border-radius: 0.5rem 0.5rem 0 0;
+  background: var(--azione);
+  border-radius: 0.6rem 0.6rem 0 0;
+}
+
+/* ---------- Progressi: voce per voce ---------- */
+.dettaglio-lezione {
+  border-top: 1px solid var(--bordo);
+}
+.dettaglio-lezione summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.8rem;
+  min-height: 3.2rem;
+  font-weight: 700;
+}
+.dettaglio-lezione summary .sotto {
+  font-weight: 400;
+  text-align: right;
+}
+.dettaglio-lezione li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.5rem 0;
+}
+.dettaglio-lezione li > span:first-child {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.dettaglio-lezione li strong {
+  color: var(--accento);
+}
+.stato {
+  flex: none;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.stato-nuova {
+  background: var(--sfondo);
+  color: var(--tenue);
+}
+.stato-debole {
+  background: var(--no-sfondo);
+  color: var(--no);
+}
+.stato-corso {
+  background: var(--incerto-sfondo);
+  color: var(--incerto);
+}
+.stato-imparata {
+  background: var(--ok-sfondo);
+  color: var(--ok);
 }
 
 /* ---------- Livelli e lezioni ---------- */
@@ -488,7 +695,9 @@ details summary {
   gap: 0.8rem;
 }
 .livello-pct {
-  font: 700 1.3rem/1 Georgia, serif;
+  font-size: 1.3rem;
+  font-weight: 800;
+  line-height: 1;
   color: var(--accento);
 }
 .elenco-lezioni {
@@ -502,12 +711,16 @@ details summary {
   align-items: center;
   gap: 0.8rem;
   width: 100%;
-  min-height: 3.75rem;
+  min-height: 3.9rem;
   padding: 0.6rem 0.8rem;
-  border: 1px solid var(--bordo);
-  border-radius: 0.9rem;
+  border: 2px solid transparent;
+  border-radius: 1rem;
   background: var(--sfondo);
   text-align: left;
+}
+.lezione.prossima {
+  border-color: var(--azione);
+  background: var(--carta);
 }
 .lezione-stato {
   display: inline-flex;
@@ -518,6 +731,10 @@ details summary {
   flex: none;
   border: 2px solid var(--bordo);
   border-radius: 50%;
+}
+.lezione.prossima .lezione-stato {
+  border-color: var(--azione);
+  background: var(--azione);
 }
 .lezione.fatta .lezione-stato {
   border-color: var(--ok);
@@ -556,17 +773,20 @@ details summary {
   padding: 0.85rem 0.9rem;
   background: var(--carta);
   border: 1px solid var(--bordo);
-  border-radius: 1rem;
+  border-radius: 1.1rem;
 }
 .riga-testi {
   min-width: 0;
 }
 .riga-hi {
-  font: 700 1.2rem/1.25 Georgia, serif;
+  font-size: 1.2rem;
+  font-weight: 800;
+  line-height: 1.25;
+  color: var(--accento);
   overflow-wrap: anywhere;
 }
 .riga-it {
-  color: var(--tenue);
+  color: var(--testo);
 }
 .riga-nota {
   color: var(--tenue);
@@ -597,7 +817,9 @@ details summary {
   padding-top: 0.2rem;
 }
 .suono-segno {
-  font: 700 1.25rem/1.2 Georgia, serif;
+  font-size: 1.3rem;
+  font-weight: 800;
+  line-height: 1.2;
   color: var(--accento);
 }
 .suono-esempio {
@@ -610,31 +832,90 @@ details summary {
 .esercizio {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
-  min-height: 100dvh;
-  padding-top: env(safe-area-inset-top);
+  min-height: calc(100vh - 3.3rem);
+  min-height: calc(100dvh - 3.3rem);
 }
 .es-testa {
   display: flex;
   align-items: center;
-  gap: 0.8rem;
-  padding: 0.7rem 1rem 0.3rem;
+  gap: 0.6rem;
+  padding: 0.7rem 1rem 0.2rem 0.5rem;
+}
+.es-testa .btn-icona {
+  width: 2.75rem;
+  height: 2.75rem;
+  border: none;
+  background: transparent;
+  color: var(--tenue);
 }
 .es-barra {
   flex: 1;
+  min-width: 0;
+}
+/* Le fasi della lezione: una tacca per fase, con il nome sotto. */
+.fasi {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  gap: 0.3rem;
+  padding-top: 0.9rem;
+}
+.fasi li {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 0;
+}
+.fase-barra {
+  display: block;
+  height: 0.5rem;
+  border-radius: 999px;
+  background: var(--bordo);
+  overflow: hidden;
+}
+.fase-barra span {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: var(--azione);
+  transition: width 0.25s ease;
+}
+.fase-nome {
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--tenue);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.fasi li.attuale .fase-nome {
+  color: var(--testo);
+  font-weight: 800;
 }
 .es-fase {
-  padding: 0.2rem 1rem 0.5rem;
+  padding: 0.5rem 1rem 0.3rem;
   color: var(--tenue);
   font-size: 0.85rem;
   font-weight: 600;
+  text-align: center;
 }
+/* Il contenuto sta al centro dello schermo: niente vuoto tra carta e pulsanti. */
 .es-corpo {
   flex: 1;
   display: flex;
   flex-direction: column;
+  justify-content: safe center;
   gap: 0.8rem;
   padding: 0.3rem 1rem 1rem;
+}
+.es-corpo > * {
+  animation: entra 0.16s ease-out;
+}
+@keyframes entra {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
 }
 /* I pulsanti principali restano in basso, a portata di pollice. */
 .es-azioni {
@@ -642,9 +923,9 @@ details summary {
   bottom: 0;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  padding: 0.8rem 1rem calc(0.9rem + env(safe-area-inset-bottom));
-  background: linear-gradient(to top, var(--sfondo) 78%, transparent);
+  gap: 0.6rem;
+  padding: 0.8rem 1rem calc(1.1rem + env(safe-area-inset-bottom));
+  background: linear-gradient(to top, var(--sfondo) 80%, transparent);
 }
 .es-azioni:empty {
   display: none;
@@ -656,45 +937,89 @@ details summary {
   text-align: center;
   color: var(--tenue);
   font-size: 0.9rem;
+  font-weight: 600;
 }
 
+/* La carta: il cuore dell'app. In cima ha un bordo a righe, come una stoffa stampata. */
 .carta {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.7rem;
-  padding: 1.6rem 1.1rem 1rem;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 2.1rem 1.1rem 1.1rem;
   background: var(--carta);
   border: 1px solid var(--bordo);
-  border-radius: 1.3rem;
+  border-radius: 1.5rem;
   box-shadow: var(--ombra);
   text-align: center;
+  overflow: hidden;
+}
+.carta::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 0.6rem;
+  background: repeating-linear-gradient(135deg, var(--azione) 0 0.5rem, var(--accento) 0.5rem 1rem, var(--forte) 1rem 1.5rem);
 }
 .carta-domanda {
-  padding-bottom: 1.6rem;
+  padding-bottom: 1.4rem;
   justify-content: center;
-  min-height: 9rem;
+  min-height: 8rem;
+}
+.carta-tocca {
+  min-height: 15rem;
+  gap: 1rem;
+}
+.carta-tocca:active {
+  transform: scale(0.99);
+}
+.carta-girata {
+  animation: gira 0.22s ease-out;
+}
+@keyframes gira {
+  from {
+    opacity: 0;
+    transform: rotateX(-70deg);
+  }
+}
+.carta-suggerimento {
+  color: var(--tenue);
+  font-size: 0.88rem;
 }
 .carta-it {
-  font-size: 1.25rem;
-  font-weight: 600;
+  font-size: 1.3rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+.carta-tocca .carta-it {
+  font-size: 1.7rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
 }
 .carta-it-piccolo {
   font-size: 1rem;
   font-weight: 400;
   color: var(--tenue);
 }
+/* La parola hindi: l'elemento più forte di tutta l'app. */
 .carta-hi {
-  font: 700 2rem/1.2 Georgia, 'Times New Roman', serif;
+  font-size: 2.3rem;
+  font-weight: 800;
+  line-height: 1.12;
+  letter-spacing: -0.02em;
   color: var(--accento);
   overflow-wrap: anywhere;
 }
 .carta-nota {
-  padding: 0.6rem 0.8rem;
-  border-radius: 0.7rem;
+  width: 100%;
+  padding: 0.65rem 0.85rem;
+  border-radius: 0.8rem;
   background: var(--sfondo);
   color: var(--tenue);
   font-size: 0.9rem;
+  text-align: left;
 }
 .carta-testo {
   align-items: stretch;
@@ -702,52 +1027,124 @@ details summary {
   padding-bottom: 1.4rem;
 }
 .carta-fine {
-  padding-bottom: 1.6rem;
+  padding-bottom: 1.7rem;
 }
 .fine-numero {
-  font: 700 3rem/1 Georgia, serif;
+  font-size: 3.4rem;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.04em;
   color: var(--accento);
 }
 
+/* ---------- Parola per parola ---------- */
+.scomposizione {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+.scomposizione-titolo {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--tenue);
+}
+.scomposizione-parole {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.4rem;
+}
+.parola {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.1rem;
+  min-height: 3.4rem;
+  max-width: 100%;
+  padding: 0.45rem 0.75rem;
+  border: none;
+  border-radius: 0.9rem;
+  background: var(--sfondo);
+}
+.parola:active {
+  background: var(--accento-tenue);
+}
+.parola-hi {
+  font-size: 1.1rem;
+  font-weight: 800;
+  line-height: 1.2;
+  color: var(--accento);
+}
+.parola-it {
+  font-size: 0.82rem;
+  line-height: 1.25;
+  color: var(--testo);
+}
+
+/* ---------- Autovalutazione ---------- */
 .voti {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 0.5rem;
 }
 .voti .btn {
-  padding: 0.6rem 0.3rem;
+  flex-direction: column;
+  gap: 0.1rem;
+  padding: 0.6rem 0.2rem;
   font-size: 0.98rem;
-  min-height: 4rem;
+  min-height: 4.4rem;
+}
+.voti .btn small {
+  font-size: 0.72rem;
+  font-weight: 600;
+  opacity: 0.85;
 }
 .btn-male {
   background: var(--no-sfondo);
   color: var(--no);
-  border-color: var(--no);
 }
 .btn-incerto {
   background: var(--incerto-sfondo);
   color: var(--incerto);
-  border-color: var(--incerto);
 }
 .btn-bene {
   background: var(--ok-sfondo);
   color: var(--ok);
-  border-color: var(--ok);
 }
 
+/* ---------- Quiz ---------- */
 .opzioni {
   display: flex;
   flex-direction: column;
   gap: 0.55rem;
 }
+.opzione-riga {
+  display: flex;
+  align-items: stretch;
+  gap: 0.5rem;
+}
+.opzione-riga .btn-opzione {
+  flex: 1;
+  min-width: 0;
+}
+.btn-ascolta-opzione {
+  flex: none;
+  width: 3.7rem;
+  min-height: 3.7rem;
+  padding: 0;
+}
 .btn-opzione {
   border-color: var(--bordo);
-  font-weight: 600;
-  min-height: 3.6rem;
+  font-weight: 700;
+  min-height: 3.7rem;
   overflow-wrap: anywhere;
 }
+.btn-opzione[lang='hi-Latn'] {
+  color: var(--accento);
+}
 .btn-opzione:disabled {
-  opacity: 0.55;
+  opacity: 0.5;
   cursor: default;
 }
 .btn-opzione.giusta {
@@ -766,8 +1163,8 @@ details summary {
   display: none;
 }
 .riscontro {
-  padding: 0.8rem 1rem;
-  border-radius: 0.9rem;
+  padding: 0.75rem 1rem;
+  border-radius: 1rem;
 }
 .riscontro-ok {
   background: var(--ok-sfondo);
@@ -776,7 +1173,7 @@ details summary {
   background: var(--no-sfondo);
 }
 .riscontro-titolo {
-  font-weight: 700;
+  font-weight: 800;
 }
 .riscontro-ok .riscontro-titolo {
   color: var(--ok);
@@ -784,26 +1181,30 @@ details summary {
 .riscontro-no .riscontro-titolo {
   color: var(--no);
 }
+.riscontro strong {
+  color: var(--accento);
+}
 
+/* ---------- Pronuncia ---------- */
 .btn-mic {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 0.2rem;
-  width: 8rem;
-  height: 8rem;
+  width: 8.5rem;
+  height: 8.5rem;
   margin: 0.4rem auto 0;
   border: none;
   border-radius: 50%;
   background: var(--accento);
-  color: var(--accento-testo);
-  font-weight: 700;
+  color: var(--su-accento);
+  font-weight: 800;
   font-size: 0.85rem;
 }
 .btn-mic .icona {
-  width: 2.4rem;
-  height: 2.4rem;
+  width: 2.5rem;
+  height: 2.5rem;
 }
 .btn-mic.attivo {
   animation: pulsa 1.1s ease-in-out infinite;
@@ -814,7 +1215,7 @@ details summary {
     box-shadow: 0 0 0 0 var(--accento-tenue);
   }
   50% {
-    box-shadow: 0 0 0 1.1rem var(--accento-tenue);
+    box-shadow: 0 0 0 1.2rem var(--accento-tenue);
   }
 }
 .esito-voce {
@@ -824,7 +1225,9 @@ details summary {
   gap: 0.3rem;
 }
 .voto {
-  font: 700 1.6rem/1.2 Georgia, serif;
+  font-size: 1.7rem;
+  font-weight: 800;
+  line-height: 1.2;
 }
 .voto-ottimo {
   color: var(--ok);
@@ -835,6 +1238,9 @@ details summary {
 .voto-riprova {
   color: var(--no);
 }
+.capito strong {
+  color: var(--accento);
+}
 
 /* ---------- Barra di navigazione in basso ---------- */
 #nav {
@@ -844,7 +1250,7 @@ details summary {
   bottom: 0;
   display: flex;
   justify-content: center;
-  padding-bottom: env(safe-area-inset-bottom);
+  padding: 0.3rem 0.3rem calc(0.3rem + env(safe-area-inset-bottom));
   background: var(--carta);
   border-top: 1px solid var(--bordo);
 }
@@ -852,30 +1258,32 @@ details summary {
   position: relative;
   flex: 1;
   max-width: 7rem;
-  min-height: 4rem;
+  min-height: 3.6rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 0.15rem;
+  border-radius: 0.9rem;
   color: var(--tenue);
   text-decoration: none;
   font-size: 0.7rem;
-  font-weight: 600;
+  font-weight: 700;
 }
 #nav a.attiva {
+  background: var(--accento-tenue);
   color: var(--accento);
 }
 .pallino {
   position: absolute;
-  top: 0.45rem;
+  top: 0.25rem;
   left: calc(50% + 0.35rem);
   min-width: 1.15rem;
   height: 1.15rem;
   padding: 0 0.25rem;
   border-radius: 999px;
-  background: var(--accento);
-  color: var(--accento-testo);
+  background: var(--azione);
+  color: var(--azione-testo);
   font-size: 0.68rem;
   line-height: 1.15rem;
   text-align: center;
@@ -885,14 +1293,15 @@ details summary {
 #avviso {
   position: fixed;
   left: 50%;
-  bottom: calc(5rem + env(safe-area-inset-bottom));
+  bottom: calc(5.5rem + env(safe-area-inset-bottom));
   transform: translate(-50%, 1rem);
   max-width: calc(100vw - 2rem);
-  padding: 0.7rem 1rem;
-  border-radius: 0.8rem;
+  padding: 0.75rem 1.1rem;
+  border-radius: 999px;
   background: var(--testo);
   color: var(--sfondo);
   font-size: 0.92rem;
+  font-weight: 600;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.2s ease, transform 0.2s ease;
@@ -907,206 +1316,4 @@ details summary {
     animation: none !important;
     transition: none !important;
   }
-}
-
-/* ---------- Parola per parola ---------- */
-.scomposizione {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 0.45rem;
-}
-.scomposizione-titolo {
-  font-size: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 0.09em;
-  text-transform: uppercase;
-  color: var(--tenue);
-}
-.scomposizione-parole {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 0.4rem;
-}
-.parola {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.1rem;
-  min-height: 3.25rem;
-  max-width: 100%;
-  padding: 0.45rem 0.7rem;
-  border: 1px solid var(--bordo);
-  border-radius: 0.8rem;
-  background: var(--sfondo);
-}
-.parola:active {
-  background: var(--accento-tenue);
-}
-.parola-hi {
-  font: 700 1.1rem/1.2 Georgia, serif;
-  color: var(--accento);
-}
-.parola-it {
-  font-size: 0.82rem;
-  line-height: 1.25;
-  color: var(--testo);
-}
-
-/* ---------- Progressi: voce per voce ---------- */
-.dettaglio-lezione {
-  border-top: 1px solid var(--bordo);
-}
-.dettaglio-lezione summary {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 0.8rem;
-  min-height: 3rem;
-  font-weight: 600;
-}
-.dettaglio-lezione summary .sotto {
-  font-weight: 400;
-  text-align: right;
-}
-.dettaglio-lezione li {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 0.7rem;
-  padding: 0.5rem 0;
-}
-.dettaglio-lezione li > span:first-child {
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-  overflow-wrap: anywhere;
-}
-.stato {
-  flex: none;
-  padding: 0.2rem 0.55rem;
-  border-radius: 999px;
-  font-size: 0.75rem;
-  font-weight: 700;
-  white-space: nowrap;
-}
-.stato-nuova {
-  background: var(--sfondo);
-  color: var(--tenue);
-}
-.stato-debole {
-  background: var(--no-sfondo);
-  color: var(--no);
-}
-.stato-corso {
-  background: var(--incerto-sfondo);
-  color: var(--incerto);
-}
-.stato-imparata {
-  background: var(--ok-sfondo);
-  color: var(--ok);
-}
-
-/* ---------- Quiz: ascolto delle risposte in hindi ---------- */
-.opzione-riga {
-  display: flex;
-  align-items: stretch;
-  gap: 0.5rem;
-}
-.opzione-riga .btn-opzione {
-  flex: 1;
-  min-width: 0;
-}
-.btn-ascolta-opzione {
-  flex: none;
-  width: 3.6rem;
-  min-height: 3.6rem;
-  padding: 0;
-}
-.centrato {
-  text-align: center;
-}
-
-/* ---------- Striscia dei progressi, sempre in alto ---------- */
-#striscia {
-  position: sticky;
-  top: 0;
-  z-index: 5;
-  display: flex;
-  align-items: center;
-  gap: 0.7rem;
-  max-width: 34rem;
-  margin: 0 auto;
-  padding: calc(0.5rem + env(safe-area-inset-top)) 1rem 0.5rem;
-  background: var(--sfondo);
-  border-bottom: 1px solid var(--bordo);
-  color: var(--testo);
-  text-decoration: none;
-  font-size: 0.78rem;
-}
-#striscia:empty {
-  display: none;
-}
-/* Durante una lezione la striscia resta visibile ma non porta via dalla lezione. */
-body.tutto-schermo #striscia {
-  pointer-events: none;
-}
-.striscia-pezzo {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.2rem;
-  flex: none;
-  color: var(--accento);
-  font-weight: 700;
-  font-size: 0.9rem;
-}
-.striscia-pezzo .icona {
-  width: 1.05rem;
-  height: 1.05rem;
-}
-.striscia-centro {
-  flex: 1;
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-}
-.striscia-testo {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  color: var(--tenue);
-}
-.striscia-testo strong {
-  color: var(--testo);
-}
-.barra-doppia {
-  position: relative;
-  display: block;
-  height: 0.45rem;
-  border-radius: 999px;
-  background: var(--bordo);
-  overflow: hidden;
-}
-.barra-doppia span {
-  position: absolute;
-  inset: 0 auto 0 0;
-  border-radius: 999px;
-  transition: width 0.3s ease;
-}
-.barra-studiate {
-  background: var(--accento);
-  opacity: 0.35;
-}
-.barra-imparate {
-  background: var(--accento);
-}
-#app {
-  padding-top: 0.8rem;
-}
-.esercizio {
-  min-height: calc(100vh - 3.2rem);
-  min-height: calc(100dvh - 3.2rem);
-  padding-top: 0;
 }

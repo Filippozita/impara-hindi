@@ -118,3 +118,12 @@ export function mescola(elenco) {
 export function metti(el, ...figli) {
   el.replaceChildren(...figli.flat().filter((f) => f !== null && f !== undefined && f !== false));
 }
+
+/** Piccola vibrazione di conferma (dove il telefono la consente). */
+export function vibra(schema) {
+  try {
+    if (navigator.vibrate) navigator.vibrate(schema);
+  } catch (e) {
+    /* non disponibile: pazienza */
+  }
+}

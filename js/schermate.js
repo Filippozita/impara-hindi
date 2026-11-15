@@ -36,55 +36,62 @@ function avvisoVoce() {
 export function home(radice) {
   const prossima = dati.prossimaLezione();
   const daFare = dati.vociDaRipassareOggi().length;
-  const totale = dati.tutteLeVoci().length;
-  const imparate = dati.vociImparate().length;
-  const oggi = stato.statisticheOggi();
-  const fila = stato.giorniDiFila();
-  const iniziata = Object.keys(stato.leggi().lezioni).length > 0;
+  const iniziata = Object.keys(stato.leggi().voci).length > 0;
+  const giorni = stato.ultimiGiorni(7);
+  const INIZIALI = ['D', 'L', 'M', 'M', 'G', 'V', 'S'];
+  const iniziale = (data) => {
+    const [a, m, g] = data.split('-').map(Number);
+    return INIZIALI[new Date(a, m - 1, g).getDay()];
+  };
+  const saluto = daFare > 0 ? `Oggi hai ${plurale(daFare, 'voce', 'voci')} da ripassare.` : iniziata ? 'Niente in scadenza: avanti con una lezione nuova.' : 'Cominciamo dai saluti. Bastano cinque minuti.';
+  let posizione = '';
+  if (prossima) {
+    const numero = prossima.livello.lezioni.indexOf(prossima.lezione) + 1;
+    posizione = `Lezione ${numero} di ${prossima.livello.lezioni.length} in "${prossima.livello.titolo}", ${plurale(prossima.lezione.voci.length, 'voce', 'voci')}`;
+  }
 
-  metti(radice, 
-    h(
-      'header',
-      { class: 'testa' },
-      h('div', {}, h('h1', {}, 'Namaste!'), h('p', { class: 'sotto' }, 'Un po\' di hindi, ogni giorno.')),
-      h('div', { class: 'serie', title: 'Giorni di fila' }, icona('fuoco'), h('strong', {}, String(fila)), h('span', {}, fila === 1 ? 'giorno' : 'giorni')),
-    ),
+  metti(
+    radice,
+    h('header', { class: 'testa' }, h('div', {}, h('h1', {}, 'Namaste'), h('p', { class: 'sotto' }, saluto))),
     avvisoVoce(),
-    stato.salvataggioOk() ? null : h('div', { class: 'banner' }, 'Attenzione: il telefono non permette di salvare i progressi (memoria piena o navigazione in incognito).'),
+    stato.salvataggioOk() ? null : h('div', { class: 'banner' }, 'Il telefono non permette di salvare i progressi (memoria piena o navigazione in incognito).'),
+    // La settimana: un segno per ogni giorno in cui hai studiato.
+    h(
+      'section',
+      { class: 'settimana', 'aria-label': 'Ultimi sette giorni' },
+      ...giorni.map((g, k) =>
+        h('div', { class: 'giorno' + (g.attivo ? ' attivo' : '') + (k === giorni.length - 1 ? ' oggi' : '') }, h('span', { class: 'giorno-punto' }, g.attivo ? icona('ok') : null), h('span', { class: 'giorno-nome' }, k === giorni.length - 1 ? 'oggi' : iniziale(g.data))),
+      ),
+    ),
+    // Se c'è del ripasso in scadenza viene prima: è la cosa che fa ricordare di più.
+    daFare > 0
+      ? h(
+          'section',
+          { class: 'scheda scheda-riga' },
+          h('div', {}, h('h2', {}, 'Ripasso di oggi'), h('p', { class: 'sotto' }, `${plurale(daFare, 'voce', 'voci')} in scadenza, un paio di minuti`)),
+          h('button', { class: 'btn btn-primario btn-stretto', type: 'button', onclick: () => vai('ripasso') }, 'Ripassa'),
+        )
+      : null,
     prossima
       ? h(
           'section',
           { class: 'scheda scheda-forte' },
-          h('p', { class: 'etichetta' }, iniziata ? 'Continua la lezione' : 'Comincia da qui'),
+          h('p', { class: 'etichetta' }, iniziata ? 'Prossima lezione' : 'Comincia da qui'),
           h('h2', {}, prossima.lezione.titolo),
-          h('p', { class: 'sotto' }, `${prossima.livello.titolo} · ${plurale(prossima.lezione.voci.length, 'voce', 'voci')}`),
-          h('button', { class: 'btn btn-chiaro', type: 'button', onclick: () => vai('lezione/' + prossima.lezione.id) }, iniziata ? 'Continua' : 'Inizia'),
+          h('p', { class: 'sotto' }, posizione),
+          h('button', { class: 'btn btn-primario', type: 'button', onclick: () => vai('lezione/' + prossima.lezione.id) }, iniziata ? 'Continua' : 'Inizia'),
         )
-      : h('section', { class: 'scheda scheda-forte' }, h('p', { class: 'etichetta' }, 'Lezioni'), h('h2', {}, 'Hai completato tutte le lezioni'), h('p', { class: 'sotto' }, 'Continua con il ripasso, o rifai una lezione dalla pagina Lezioni.')),
-    h(
-      'section',
-      { class: 'scheda' },
-      h('p', { class: 'etichetta' }, 'Ripasso di oggi'),
-      h('div', { class: 'riga-numero' }, h('p', { class: 'numero' }, String(daFare)), h('p', { class: 'sotto' }, daFare === 1 ? 'voce da ripassare' : 'voci da ripassare')),
-      daFare > 0
-        ? h('button', { class: 'btn btn-primario', type: 'button', onclick: () => vai('ripasso') }, 'Ripassa ora')
-        : h('p', { class: 'suggerimento' }, 'Niente in scadenza per ora.'),
-    ),
-    h(
-      'section',
-      { class: 'scheda' },
-      h('p', { class: 'etichetta' }, 'Progressi in breve'),
-      h('p', { class: 'riga-progressi' }, h('strong', {}, `${imparate} di ${totale}`), ' voci imparate'),
-      barra(totale ? imparate / totale : 0, 'Voci imparate'),
-      h('p', { class: 'sotto' }, `Oggi: ${plurale(oggi.minuti, 'minuto', 'minuti')} · ${plurale(oggi.sessioni, 'sessione', 'sessioni')}`),
-      h('button', { class: 'btn-testo', type: 'button', onclick: () => vai('progressi') }, 'Vedi tutti i progressi'),
-    ),
+      : h('section', { class: 'scheda scheda-forte' }, h('h2', {}, 'Hai completato tutte le lezioni'), h('p', { class: 'sotto' }, 'Continua con il ripasso, oppure rifai una lezione.'), h('button', { class: 'btn btn-primario', type: 'button', onclick: () => vai('livelli') }, 'Vai alle lezioni')),
+    iniziata
+      ? null
+      : h('button', { class: 'scheda scheda-link', type: 'button', onclick: () => vai('come-si-legge') }, h('span', {}, h('strong', {}, 'Come si legge'), h('span', { class: 'sotto' }, 'Due minuti per capire aa, ii, uu e gli altri suoni')), icona('freccia')),
   );
 }
 
 // ---------- Livelli e lezioni ----------
 
 export function livelli(radice) {
+  const prossima = dati.prossimaLezione();
   const sezioni = dati.tuttiILivelli().map((livello, i) => {
     const aperto = dati.livelloSbloccato(i);
     const avanzamento = dati.avanzamentoLivello(livello);
@@ -100,14 +107,15 @@ export function livelli(radice) {
             { class: 'elenco-lezioni' },
             ...livello.lezioni.map((lezione) => {
               const fatta = stato.lezioneCompletata(lezione.id);
+              const eProssima = Boolean(prossima && prossima.lezione.id === lezione.id);
               return h(
                 'li',
                 {},
                 h(
                   'button',
-                  { class: 'lezione' + (fatta ? ' fatta' : ''), type: 'button', onclick: () => vai('lezione/' + lezione.id) },
+                  { class: 'lezione' + (fatta ? ' fatta' : '') + (eProssima ? ' prossima' : ''), type: 'button', onclick: () => vai('lezione/' + lezione.id) },
                   h('span', { class: 'lezione-stato' }, fatta ? icona('ok') : null),
-                  h('span', { class: 'lezione-testi' }, h('strong', {}, lezione.titolo), h('span', {}, `${plurale(lezione.voci.length, 'voce', 'voci')}${fatta ? ' · fatta, tocca per rifarla' : ''}`)),
+                  h('span', { class: 'lezione-testi' }, h('strong', {}, lezione.titolo), h('span', {}, `${plurale(lezione.voci.length, 'voce', 'voci')}${fatta ? ', fatta' : eProssima ? ', la prossima' : ''}`)),
                   icona('freccia'),
                 ),
               );

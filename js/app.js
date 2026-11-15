@@ -21,7 +21,7 @@ function applicaTema() {
   if (tema === 'chiaro' || tema === 'scuro') document.documentElement.dataset.tema = tema;
   else delete document.documentElement.dataset.tema;
   // La barra del browser prende il colore dello sfondo.
-  const sfondo = getComputedStyle(document.documentElement).getPropertyValue('--sfondo').trim();
+  const sfondo = getComputedStyle(document.documentElement).getPropertyValue('--forte').trim();
   const meta = document.querySelector('meta[name="theme-color"]');
   if (meta && sfondo) meta.setAttribute('content', sfondo);
 }

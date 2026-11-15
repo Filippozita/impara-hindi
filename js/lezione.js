@@ -5,7 +5,7 @@ import * as stato from './stato.js';
 import * as dati from './dati.js';
 import { parla, zittisci, audioUtilizzabile } from './audio.js';
 import { riconoscimentoDisponibile, ascolta, fermaAscolto, valuta, traslittera } from './voce.js';
-import { h, metti, icona, vai, pulsantiAudio, segnalibro, barra, mescola } from './ui.js';
+import { h, metti, icona, vai, pulsantiAudio, segnalibro, barra, mescola, vibra } from './ui.js';
 
 /** Voto dopo un errore nel quiz: scende di un gradino. */
 const PEGGIORA = { bene: 'incerto', incerto: 'male', male: 'male' };
@@ -16,7 +16,7 @@ const MAX_RIPASSO = 20;
 // ---------- Pezzi condivisi ----------
 
 /** Struttura a tutto schermo: intestazione con chiusura e barra, corpo, pulsanti in basso. */
-function creaTelaio(radice, { domandaUscita }) {
+function creaTelaio(radice, { domandaUscita, fasi }) {
   const zonaBarra = h('div', { class: 'es-barra' });
   const fase = h('p', { class: 'es-fase' });
   const corpo = h('div', { class: 'es-corpo' });
@@ -40,7 +40,23 @@ function creaTelaio(radice, { domandaUscita }) {
     /** Aggiorna titolo della fase e barra (progresso tra 0 e 1). */
     imposta(testoFase, progresso) {
       fase.textContent = testoFase;
-      metti(zonaBarra, barra(progresso, 'Avanzamento della sessione'));
+      if (fasi) {
+        // Una tacca per fase: si vede a colpo d'occhio a che punto è la lezione.
+        const attuale = Math.min(fasi.length, Math.floor(progresso * fasi.length + 1e-9));
+        metti(
+          zonaBarra,
+          h(
+            'ol',
+            { class: 'fasi', 'aria-label': 'Fasi della lezione' },
+            ...fasi.map((nome, k) => {
+              const quota = k < attuale ? 1 : k > attuale ? 0 : progresso * fasi.length - attuale;
+              return h('li', { class: k === attuale ? 'attuale' : k < attuale ? 'fatta' : '', 'aria-current': k === attuale ? 'step' : null }, h('span', { class: 'fase-barra' }, h('span', { style: `width:${Math.round(quota * 100)}%` })), h('span', { class: 'fase-nome' }, nome));
+            }),
+          ),
+        );
+      } else {
+        metti(zonaBarra, barra(progresso, 'Avanzamento della sessione'));
+      }
       corpo.scrollTop = 0;
       window.scrollTo(0, 0);
     },
@@ -104,35 +120,45 @@ export function rigaVoce(voce, ...extra) {
   );
 }
 
-/** Mostra una flashcard (prima il lato italiano, poi la risposta con l'autovalutazione). */
+/** Mostra una flashcard: prima il lato italiano (si gira toccandolo), poi la risposta con l'autovalutazione. */
 function mostraFlashcard(telaio, voce, alVoto) {
-  metti(telaio.corpo, 
-    h('div', { class: 'carta carta-domanda' }, h('p', { class: 'carta-etichetta' }, 'Come si dice in hindi?'), h('p', { class: 'carta-it' }, voce.it)),
-  );
-  metti(telaio.azioni, 
+  const voto = (esito, nome, effetto) =>
     h(
       'button',
       {
-        class: 'btn btn-primario',
+        class: 'btn btn-' + esito,
         type: 'button',
         onclick: () => {
-          metti(telaio.corpo, cartaVoce(voce));
-          parla(voce.devanagari);
-          metti(telaio.azioni, 
-            h('p', { class: 'es-domanda' }, 'Com\'è andata?'),
-            h(
-              'div',
-              { class: 'voti' },
-              h('button', { class: 'btn btn-male', type: 'button', onclick: () => alVoto('male') }, 'Non sapevo'),
-              h('button', { class: 'btn btn-incerto', type: 'button', onclick: () => alVoto('incerto') }, 'Incerto'),
-              h('button', { class: 'btn btn-bene', type: 'button', onclick: () => alVoto('bene') }, 'Sapevo'),
-            ),
-          );
+          vibra(10);
+          alVoto(esito);
         },
       },
-      'Mostra la risposta',
+      h('span', {}, nome),
+      h('small', {}, effetto),
+    );
+  const gira = () => {
+    vibra(8);
+    const retro = cartaVoce(voce);
+    retro.classList.add('carta-girata');
+    metti(telaio.corpo, retro);
+    parla(voce.devanagari);
+    metti(
+      telaio.azioni,
+      h('p', { class: 'es-domanda' }, 'La sapevi?'),
+      h('div', { class: 'voti' }, voto('male', 'Non sapevo', 'torna subito'), voto('incerto', 'Incerto', 'torna oggi'), voto('bene', 'Sapevo', 'va avanti')),
+    );
+  };
+  metti(
+    telaio.corpo,
+    h(
+      'button',
+      { class: 'carta carta-domanda carta-tocca', type: 'button', onclick: gira },
+      h('span', { class: 'carta-etichetta' }, 'Come si dice in hindi?'),
+      h('span', { class: 'carta-it' }, voce.it),
+      h('span', { class: 'carta-suggerimento' }, 'Dillo ad alta voce, poi tocca la carta'),
     ),
   );
+  metti(telaio.azioni, h('button', { class: 'btn btn-primario', type: 'button', onclick: gira }, 'Mostra la risposta'));
 }
 
 // ---------- Lezione ----------
@@ -145,6 +171,7 @@ export function avviaLezione(radice, { lezione, livello }) {
   const indiceLivello = dati.tuttiILivelli().indexOf(livello);
   const successivoEraAperto = dati.livelloSbloccato(indiceLivello + 1);
   const telaio = creaTelaio(radice, {
+    fasi: ['Scopri', 'Flashcard', 'Quiz', 'Pronuncia'],
     domandaUscita: () => (terminata ? '' : 'Uscire dalla lezione? Le risposte date finora restano salvate, ma la lezione non risulterà completata.'),
   });
 
@@ -262,15 +289,12 @@ export function avviaLezione(radice, { lezione, livello }) {
           if (!ripetuta) coda.push({ voce, tipo, ripetuta: true });
         }
         if (!ripetuta) fatte += 1;
+        vibra(giusta ? 12 : [30, 60, 30]);
         riscontro.className = 'riscontro ' + (giusta ? 'riscontro-ok' : 'riscontro-no');
-        metti(riscontro, 
-          h('p', { class: 'riscontro-titolo' }, giusta ? 'Giusto!' : 'Non proprio'),
-          h('p', {}, h('strong', { lang: 'hi-Latn' }, voce.translit), ' = ', voce.it),
-        );
+        metti(riscontro, h('p', { class: 'riscontro-titolo' }, giusta ? 'Giusto' : 'Era questa'), h('p', {}, h('strong', { lang: 'hi-Latn' }, voce.translit), ' = ', voce.it));
         parla(voce.devanagari);
-        const avanti = h('button', { class: 'btn btn-primario', type: 'button', onclick: domanda }, 'Avanti');
-        metti(telaio.azioni, avanti);
-        avanti.scrollIntoView({ block: 'nearest' });
+        // Esito e "Avanti" insieme in basso, a portata di pollice.
+        metti(telaio.azioni, riscontro, h('button', { class: 'btn btn-primario', type: 'button', onclick: domanda }, 'Avanti'));
       }
     }
     domanda();

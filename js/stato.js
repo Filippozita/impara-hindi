@@ -220,3 +220,14 @@ export function azzera() {
   stato.impostazioni.tema = tema;
   salva();
 }
+
+/** Gli ultimi n giorni (oggi per ultimo), ciascuno con l'indicazione se hai studiato. */
+export function ultimiGiorni(n = 7) {
+  const elenco = [];
+  for (let i = n - 1; i >= 0; i--) {
+    const data = sommaGiorni(oggi(), -i);
+    const g = stato.giorni[data];
+    elenco.push({ data, attivo: Boolean(g && (g.risposte > 0 || g.sessioni > 0)) });
+  }
+  return elenco;
+}
