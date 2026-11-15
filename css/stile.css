@@ -1027,3 +1027,86 @@ details summary {
 .centrato {
   text-align: center;
 }
+
+/* ---------- Striscia dei progressi, sempre in alto ---------- */
+#striscia {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  max-width: 34rem;
+  margin: 0 auto;
+  padding: calc(0.5rem + env(safe-area-inset-top)) 1rem 0.5rem;
+  background: var(--sfondo);
+  border-bottom: 1px solid var(--bordo);
+  color: var(--testo);
+  text-decoration: none;
+  font-size: 0.78rem;
+}
+#striscia:empty {
+  display: none;
+}
+/* Durante una lezione la striscia resta visibile ma non porta via dalla lezione. */
+body.tutto-schermo #striscia {
+  pointer-events: none;
+}
+.striscia-pezzo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  flex: none;
+  color: var(--accento);
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+.striscia-pezzo .icona {
+  width: 1.05rem;
+  height: 1.05rem;
+}
+.striscia-centro {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+.striscia-testo {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--tenue);
+}
+.striscia-testo strong {
+  color: var(--testo);
+}
+.barra-doppia {
+  position: relative;
+  display: block;
+  height: 0.45rem;
+  border-radius: 999px;
+  background: var(--bordo);
+  overflow: hidden;
+}
+.barra-doppia span {
+  position: absolute;
+  inset: 0 auto 0 0;
+  border-radius: 999px;
+  transition: width 0.3s ease;
+}
+.barra-studiate {
+  background: var(--accento);
+  opacity: 0.35;
+}
+.barra-imparate {
+  background: var(--accento);
+}
+#app {
+  padding-top: 0.8rem;
+}
+.esercizio {
+  min-height: calc(100vh - 3.2rem);
+  min-height: calc(100dvh - 3.2rem);
+  padding-top: 0;
+}

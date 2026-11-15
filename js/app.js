@@ -11,6 +11,7 @@ import * as schermate from './schermate.js';
 
 const radice = document.getElementById('app');
 const nav = document.getElementById('nav');
+const striscia = document.getElementById('striscia');
 let pulizia = null; // funzione da chiamare quando si lascia la schermata corrente
 
 // ---------- Tema ----------
@@ -48,6 +49,28 @@ function disegnaNav(percorso) {
         dove === 'da-ripassare' && inLista > 0 ? h('span', { class: 'pallino' }, String(inLista)) : null,
       );
     }),
+  );
+}
+
+// ---------- Striscia dei progressi (sempre visibile) ----------
+
+function disegnaStriscia() {
+  const tutte = dati.tutteLeVoci();
+  const totale = tutte.length || 1;
+  const studiate = tutte.filter((v) => stato.leggiVoce(v.id).scatola >= 1).length;
+  const imparate = dati.vociImparate().length;
+  const daFare = dati.vociDaRipassareOggi().length;
+  const oggi = stato.statisticheOggi();
+  striscia.replaceChildren(
+    h('span', { class: 'striscia-pezzo', title: 'Giorni di fila' }, icona('fuoco'), String(stato.giorniDiFila())),
+    h(
+      'span',
+      { class: 'striscia-centro' },
+      h('span', { class: 'striscia-testo' }, h('strong', {}, `${studiate} di ${tutte.length}`), ` studiate · ${imparate} imparate · ${oggi.minuti} min oggi`),
+      // Barra a due toni: chiaro = studiate, pieno = imparate.
+      h('span', { class: 'barra-doppia' }, h('span', { class: 'barra-studiate', style: `width:${(studiate / totale) * 100}%` }), h('span', { class: 'barra-imparate', style: `width:${(imparate / totale) * 100}%` })),
+    ),
+    h('span', { class: 'striscia-pezzo', title: 'Da ripassare oggi' }, icona('ripeti'), String(daFare)),
   );
 }
 
@@ -102,6 +125,7 @@ function mostra() {
   }
 
   document.body.classList.toggle('tutto-schermo', aTuttoSchermo);
+  disegnaStriscia();
   if (!aTuttoSchermo) disegnaNav(percorso || '');
 }
 
@@ -140,7 +164,10 @@ async function avvia() {
   preparaDizionario(dati.tutteLeVoci());
   window.addEventListener('hashchange', mostra);
   // Liste e contatori cambiati (import, azzeramento…): si ridisegna la barra in basso.
-  window.addEventListener('progressi-cambiati', () => disegnaNav(window.location.hash.replace(/^#\/?/, '').split('/')[0]));
+  window.addEventListener('progressi-cambiati', () => {
+    disegnaStriscia();
+    if (!document.body.classList.contains('tutto-schermo')) disegnaNav(window.location.hash.replace(/^#\/?/, '').split('/')[0]);
+  });
   // Quando il telefono comunica le voci disponibili, la home aggiorna l'avviso sulla voce hindi.
   quandoCambiaVoce(() => {
     if (window.location.hash.replace(/^#\/?/, '') === '') schermate.home(radice);

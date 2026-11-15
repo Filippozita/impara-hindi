@@ -56,6 +56,8 @@ export function salva() {
   } catch (e) {
     salvataggioFunziona = false;
   }
+  // Avvisa l'app che i progressi sono cambiati (la striscia in alto si aggiorna da sola).
+  if (typeof window !== 'undefined') window.dispatchEvent(new Event('progressi-cambiati'));
   return salvataggioFunziona;
 }
 

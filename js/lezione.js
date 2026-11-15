@@ -7,6 +7,9 @@ import { parla, zittisci, audioUtilizzabile } from './audio.js';
 import { riconoscimentoDisponibile, ascolta, fermaAscolto, valuta, traslittera } from './voce.js';
 import { h, metti, icona, vai, pulsantiAudio, segnalibro, barra, mescola } from './ui.js';
 
+/** Voto dopo un errore nel quiz: scende di un gradino. */
+const PEGGIORA = { bene: 'incerto', incerto: 'male', male: 'male' };
+
 /** Quante voci al massimo in una sessione di ripasso (le sessioni devono restare brevi). */
 const MAX_RIPASSO = 20;
 
@@ -138,8 +141,11 @@ export function avviaLezione(radice, { lezione, livello }) {
   const voci = lezione.voci;
   const n = voci.length;
   let terminata = false;
+  // Com'era il livello successivo prima di cominciare: serve per annunciare lo sblocco alla fine.
+  const indiceLivello = dati.tuttiILivelli().indexOf(livello);
+  const successivoEraAperto = dati.livelloSbloccato(indiceLivello + 1);
   const telaio = creaTelaio(radice, {
-    domandaUscita: () => (terminata ? '' : 'Uscire dalla lezione? I progressi di questa lezione non verranno salvati.'),
+    domandaUscita: () => (terminata ? '' : 'Uscire dalla lezione? Le risposte date finora restano salvate, ma la lezione non risulterà completata.'),
   });
 
   // Esito per voce: voto dato nella flashcard + eventuale errore nel quiz.
@@ -182,6 +188,8 @@ export function avviaLezione(radice, { lezione, livello }) {
     telaio.imposta(`Flashcard · ${i + 1} di ${n}`, progresso(1, i));
     mostraFlashcard(telaio, voce, (voto) => {
       esiti.get(voce.id).carta = voto;
+      // Salvata subito: la striscia dei progressi in alto si muove a ogni risposta.
+      stato.registraRisposta(voce.id, voto);
       if (i + 1 < n) flashcard(i + 1, ordine);
       else avviaQuiz();
     });
@@ -247,6 +255,8 @@ export function avviaLezione(radice, { lezione, livello }) {
           else if (opzioni[k].id === scelta.id) b.classList.add('sbagliata');
         });
         if (!giusta) {
+          // Un errore nel quiz abbassa di un gradino il voto dato nella flashcard (una volta sola).
+          if (!esiti.get(voce.id).quizSbagliato) stato.registraRisposta(voce.id, PEGGIORA[esiti.get(voce.id).carta]);
           esiti.get(voce.id).quizSbagliato = true;
           // Una voce sbagliata torna una volta in fondo alla coda.
           if (!ripetuta) coda.push({ voce, tipo, ripetuta: true });
@@ -353,17 +363,13 @@ export function avviaLezione(radice, { lezione, livello }) {
     terminata = true;
     zittisci();
     fermaAscolto();
-    const indiceLivello = dati.tuttiILivelli().indexOf(livello);
-    const successivoEraAperto = dati.livelloSbloccato(indiceLivello + 1);
 
-    // Un errore nel quiz abbassa di un gradino il voto dato nella flashcard.
-    const peggiora = { bene: 'incerto', incerto: 'male', male: 'male' };
+    // Le risposte sono già state salvate una per una: qui si fa solo il riepilogo.
     let sapute = 0;
     const deboli = [];
     for (const voce of voci) {
       const e = esiti.get(voce.id);
-      const voto = e.quizSbagliato ? peggiora[e.carta] : e.carta;
-      stato.registraRisposta(voce.id, voto);
+      const voto = e.quizSbagliato ? PEGGIORA[e.carta] : e.carta;
       if (voto === 'bene') sapute += 1;
       else deboli.push(voce);
     }
