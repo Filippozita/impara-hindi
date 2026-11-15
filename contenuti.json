@@ -1,0 +1,313 @@
+{
+  "versione": 1,
+  "livelli": [
+    {
+      "id": "l1",
+      "titolo": "Frasi più comuni",
+      "descrizione": "Saluti, presentazioni, cortesia e domande di base.",
+      "lezioni": [
+        {
+          "id": "l1-saluti",
+          "titolo": "Saluti",
+          "voci": [
+            { "id": "l1-namaste", "it": "Ciao / Buongiorno", "translit": "namaste", "devanagari": "नमस्ते", "tipo": "parola", "nota": "Saluto universale: va bene a ogni ora, sia per arrivare sia per andare via." },
+            { "id": "l1-namaskaar", "it": "Salve (più formale)", "translit": "namaskaar", "devanagari": "नमस्कार", "tipo": "parola" },
+            { "id": "l1-kaise-hain", "it": "Come stai?", "translit": "aap kaise hain?", "devanagari": "आप कैसे हैं?", "tipo": "frase", "nota": "Forma di rispetto, rivolta a un uomo. A una donna: \"aap kaisii hain?\"" },
+            { "id": "l1-thiik-huun", "it": "Sto bene", "translit": "main thiik huun", "devanagari": "मैं ठीक हूँ", "tipo": "frase" },
+            { "id": "l1-aur-aap", "it": "E tu?", "translit": "aur aap?", "devanagari": "और आप?", "tipo": "frase" },
+            { "id": "l1-kyaa-haal", "it": "Come va? (informale)", "translit": "kyaa haal hai?", "devanagari": "क्या हाल है?", "tipo": "frase" },
+            { "id": "l1-sab-thiik", "it": "Tutto bene", "translit": "sab thiik hai", "devanagari": "सब ठीक है", "tipo": "frase" },
+            { "id": "l1-svaagat", "it": "Benvenuto", "translit": "svaagat hai", "devanagari": "स्वागत है", "tipo": "frase" },
+            { "id": "l1-phir-milenge", "it": "Arrivederci / Ci vediamo", "translit": "phir milenge", "devanagari": "फिर मिलेंगे", "tipo": "frase", "nota": "Letteralmente \"ci incontreremo di nuovo\"." },
+            { "id": "l1-shubh-raatri", "it": "Buonanotte", "translit": "shubh raatri", "devanagari": "शुभ रात्रि", "tipo": "frase", "nota": "Formale. Nel parlato di città si sente spesso anche l'inglese \"good night\"." }
+          ]
+        },
+        {
+          "id": "l1-presentarsi",
+          "titolo": "Presentarsi",
+          "voci": [
+            { "id": "l1-naam-kyaa", "it": "Come ti chiami?", "translit": "aapkaa naam kyaa hai?", "devanagari": "आपका नाम क्या है?", "tipo": "frase" },
+            { "id": "l1-meraa-naam", "it": "Mi chiamo Marco", "translit": "meraa naam Marco hai", "devanagari": "मेरा नाम मार्को है", "tipo": "frase", "nota": "Detto da un uomo. Una donna dice lo stesso: \"meraa naam\" concorda con \"naam\" (nome), non con chi parla." },
+            { "id": "l1-milkar-khushii", "it": "Piacere di conoscerti", "translit": "aapse milkar khushii huii", "devanagari": "आपसे मिलकर ख़ुशी हुई", "tipo": "frase" },
+            { "id": "l1-kahaan-se", "it": "Di dove sei?", "translit": "aap kahaan se hain?", "devanagari": "आप कहाँ से हैं?", "tipo": "frase" },
+            { "id": "l1-itlii-se", "it": "Vengo dall'Italia", "translit": "main Itlii se huun", "devanagari": "मैं इटली से हूँ", "tipo": "frase", "nota": "\"Itlii\" è il nome dell'Italia in hindi." },
+            { "id": "l1-angrezii", "it": "Parli inglese?", "translit": "kyaa aap angrezii bolte hain?", "devanagari": "क्या आप अंग्रेज़ी बोलते हैं?", "tipo": "frase", "nota": "Rivolta a un uomo. A una donna: \"boltii hain\"." },
+            { "id": "l1-thodii-hindii", "it": "Parlo un po' di hindi", "translit": "main thodii hindii boltaa huun", "devanagari": "मैं थोड़ी हिंदी बोलता हूँ", "tipo": "frase", "nota": "Forma maschile. Una donna dice \"boltii huun\"." },
+            { "id": "l1-siikh-rahaa", "it": "Sto imparando l'hindi", "translit": "main hindii siikh rahaa huun", "devanagari": "मैं हिंदी सीख रहा हूँ", "tipo": "frase", "nota": "Forma maschile. Una donna dice \"siikh rahii huun\"." },
+            { "id": "l1-meraa-dost", "it": "Questo è il mio amico", "translit": "ye meraa dost hai", "devanagari": "ये मेरा दोस्त है", "tipo": "frase", "nota": "Per un'amica: \"ye merii dost hai\"." }
+          ]
+        },
+        {
+          "id": "l1-cortesia",
+          "titolo": "Cortesia, sì e no",
+          "voci": [
+            { "id": "l1-dhanyavaad", "it": "Grazie", "translit": "dhanyavaad", "devanagari": "धन्यवाद", "tipo": "parola" },
+            { "id": "l1-shukriyaa", "it": "Grazie (colloquiale)", "translit": "shukriyaa", "devanagari": "शुक्रिया", "tipo": "parola" },
+            { "id": "l1-koii-baat", "it": "Prego / Di niente", "translit": "koii baat nahiin", "devanagari": "कोई बात नहीं", "tipo": "frase", "nota": "Letteralmente \"non è niente\". Si usa anche per \"non fa niente\"." },
+            { "id": "l1-maaf", "it": "Scusa / Mi dispiace", "translit": "maaf kiijiye", "devanagari": "माफ़ कीजिए", "tipo": "frase" },
+            { "id": "l1-kripayaa", "it": "Per favore", "translit": "kripayaa", "devanagari": "कृपया", "tipo": "parola", "nota": "Piuttosto formale. Nel parlato basta la forma gentile del verbo, che finisce in \"-iye\" (boliye, suniye)." },
+            { "id": "l1-suniye", "it": "Senta, scusi! (per chiamare qualcuno)", "translit": "suniye", "devanagari": "सुनिए", "tipo": "parola" },
+            { "id": "l1-haan", "it": "Sì", "translit": "haan", "devanagari": "हाँ", "tipo": "parola" },
+            { "id": "l1-jii-haan", "it": "Sì (rispettoso)", "translit": "jii haan", "devanagari": "जी हाँ", "tipo": "frase", "nota": "\"jii\" aggiunge rispetto: si mette anche dopo i nomi." },
+            { "id": "l1-nahiin", "it": "No", "translit": "nahiin", "devanagari": "नहीं", "tipo": "parola" },
+            { "id": "l1-thiik-hai", "it": "Va bene / D'accordo", "translit": "thiik hai", "devanagari": "ठीक है", "tipo": "frase" }
+          ]
+        },
+        {
+          "id": "l1-capirsi",
+          "titolo": "Capirsi",
+          "voci": [
+            { "id": "l1-nahiin-samjhaa", "it": "Non capisco", "translit": "main nahiin samjhaa", "devanagari": "मैं नहीं समझा", "tipo": "frase", "nota": "Forma maschile. Una donna dice \"main nahiin samjhii\"." },
+            { "id": "l1-samajh-nahiin", "it": "Non ho capito", "translit": "mujhe samajh nahiin aayaa", "devanagari": "मुझे समझ नहीं आया", "tipo": "frase", "nota": "Uguale per uomo e donna." },
+            { "id": "l1-samajh-gayaa", "it": "Ho capito", "translit": "main samajh gayaa", "devanagari": "मैं समझ गया", "tipo": "frase", "nota": "Forma maschile. Una donna dice \"main samajh gayii\"." },
+            { "id": "l1-dhiire", "it": "Parla piano, per favore", "translit": "dhiire boliye", "devanagari": "धीरे बोलिए", "tipo": "frase", "nota": "\"dhiire\" = lentamente." },
+            { "id": "l1-phir-se", "it": "Puoi ripetere?", "translit": "phir se boliye", "devanagari": "फिर से बोलिए", "tipo": "frase", "nota": "Letteralmente \"dica di nuovo\"." },
+            { "id": "l1-nahiin-pataa", "it": "Non lo so", "translit": "mujhe nahiin pataa", "devanagari": "मुझे नहीं पता", "tipo": "frase" },
+            { "id": "l1-hindii-nahiin-aatii", "it": "Non parlo hindi", "translit": "mujhe hindii nahiin aatii", "devanagari": "मुझे हिंदी नहीं आती", "tipo": "frase", "nota": "Letteralmente \"l'hindi non mi viene\"." },
+            { "id": "l1-matlab", "it": "Cosa significa?", "translit": "iskaa matlab kyaa hai?", "devanagari": "इसका मतलब क्या है?", "tipo": "frase" },
+            { "id": "l1-kyaa-kahte", "it": "Come si dice in hindi?", "translit": "ise hindii men kyaa kahte hain?", "devanagari": "इसे हिंदी में क्या कहते हैं?", "tipo": "frase" },
+            { "id": "l1-madad", "it": "Mi aiuti, per favore", "translit": "merii madad kiijiye", "devanagari": "मेरी मदद कीजिए", "tipo": "frase" }
+          ]
+        },
+        {
+          "id": "l1-parole-domanda",
+          "titolo": "Parole per domandare",
+          "voci": [
+            { "id": "l1-kyaa", "it": "Cosa?", "translit": "kyaa?", "devanagari": "क्या?", "tipo": "parola", "nota": "Messo all'inizio di una frase la trasforma in una domanda sì/no." },
+            { "id": "l1-kahaan", "it": "Dove?", "translit": "kahaan?", "devanagari": "कहाँ?", "tipo": "parola" },
+            { "id": "l1-kab", "it": "Quando?", "translit": "kab?", "devanagari": "कब?", "tipo": "parola" },
+            { "id": "l1-kyon", "it": "Perché?", "translit": "kyon?", "devanagari": "क्यों?", "tipo": "parola" },
+            { "id": "l1-kaun", "it": "Chi?", "translit": "kaun?", "devanagari": "कौन?", "tipo": "parola" },
+            { "id": "l1-kaise", "it": "Come?", "translit": "kaise?", "devanagari": "कैसे?", "tipo": "parola" },
+            { "id": "l1-kitnaa", "it": "Quanto?", "translit": "kitnaa?", "devanagari": "कितना?", "tipo": "parola" }
+          ]
+        },
+        {
+          "id": "l1-domande-utili",
+          "titolo": "Domande utili",
+          "voci": [
+            { "id": "l1-ye-kyaa", "it": "Che cos'è questo?", "translit": "ye kyaa hai?", "devanagari": "ये क्या है?", "tipo": "frase" },
+            { "id": "l1-kitne-kaa", "it": "Quanto costa?", "translit": "ye kitne kaa hai?", "devanagari": "ये कितने का है?", "tipo": "frase" },
+            { "id": "l1-mahangaa", "it": "È troppo caro", "translit": "bahut mahangaa hai", "devanagari": "बहुत महँगा है", "tipo": "frase", "nota": "\"bahut\" (molto) si pronuncia quasi \"bahot\"." },
+            { "id": "l1-ye-chaahiye", "it": "Vorrei questo", "translit": "mujhe ye chaahiye", "devanagari": "मुझे ये चाहिए", "tipo": "frase" },
+            { "id": "l1-nahiin-chaahiye", "it": "Non lo voglio", "translit": "mujhe nahiin chaahiye", "devanagari": "मुझे नहीं चाहिए", "tipo": "frase" },
+            { "id": "l1-baathruum", "it": "Dov'è il bagno?", "translit": "baathruum kahaan hai?", "devanagari": "बाथरूम कहाँ है?", "tipo": "frase" },
+            { "id": "l1-steshan", "it": "Dov'è la stazione?", "translit": "steshan kahaan hai?", "devanagari": "स्टेशन कहाँ है?", "tipo": "frase" },
+            { "id": "l1-kitne-baje", "it": "Che ore sono?", "translit": "kitne baje hain?", "devanagari": "कितने बजे हैं?", "tipo": "frase" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "l2",
+      "titolo": "Numeri",
+      "descrizione": "Da 1 a 20, le decine fino a 100 e come si formano gli altri.",
+      "lezioni": [
+        {
+          "id": "l2-1-5",
+          "titolo": "Da 1 a 5",
+          "voci": [
+            { "id": "l2-1", "it": "1 · uno", "translit": "ek", "devanagari": "एक", "tipo": "parola", "alternative": ["1"] },
+            { "id": "l2-2", "it": "2 · due", "translit": "do", "devanagari": "दो", "tipo": "parola", "alternative": ["2"] },
+            { "id": "l2-3", "it": "3 · tre", "translit": "tiin", "devanagari": "तीन", "tipo": "parola", "alternative": ["3"] },
+            { "id": "l2-4", "it": "4 · quattro", "translit": "chaar", "devanagari": "चार", "tipo": "parola", "alternative": ["4"] },
+            { "id": "l2-5", "it": "5 · cinque", "translit": "paanch", "devanagari": "पाँच", "tipo": "parola", "alternative": ["5"] }
+          ]
+        },
+        {
+          "id": "l2-6-10",
+          "titolo": "Da 6 a 10",
+          "voci": [
+            { "id": "l2-6", "it": "6 · sei", "translit": "chhah", "devanagari": "छह", "tipo": "parola", "nota": "Nel parlato suona quasi \"chhe\".", "alternative": ["6", "छः", "छे"] },
+            { "id": "l2-7", "it": "7 · sette", "translit": "saat", "devanagari": "सात", "tipo": "parola", "alternative": ["7"] },
+            { "id": "l2-8", "it": "8 · otto", "translit": "aath", "devanagari": "आठ", "tipo": "parola", "alternative": ["8"] },
+            { "id": "l2-9", "it": "9 · nove", "translit": "nau", "devanagari": "नौ", "tipo": "parola", "alternative": ["9"] },
+            { "id": "l2-10", "it": "10 · dieci", "translit": "das", "devanagari": "दस", "tipo": "parola", "alternative": ["10"] }
+          ]
+        },
+        {
+          "id": "l2-11-15",
+          "titolo": "Da 11 a 15",
+          "voci": [
+            { "id": "l2-11", "it": "11 · undici", "translit": "gyaarah", "devanagari": "ग्यारह", "tipo": "parola", "alternative": ["11"] },
+            { "id": "l2-12", "it": "12 · dodici", "translit": "baarah", "devanagari": "बारह", "tipo": "parola", "alternative": ["12"] },
+            { "id": "l2-13", "it": "13 · tredici", "translit": "terah", "devanagari": "तेरह", "tipo": "parola", "alternative": ["13"] },
+            { "id": "l2-14", "it": "14 · quattordici", "translit": "chaudah", "devanagari": "चौदह", "tipo": "parola", "alternative": ["14"] },
+            { "id": "l2-15", "it": "15 · quindici", "translit": "pandrah", "devanagari": "पंद्रह", "tipo": "parola", "alternative": ["15"] }
+          ]
+        },
+        {
+          "id": "l2-16-20",
+          "titolo": "Da 16 a 20",
+          "voci": [
+            { "id": "l2-16", "it": "16 · sedici", "translit": "solah", "devanagari": "सोलह", "tipo": "parola", "alternative": ["16"] },
+            { "id": "l2-17", "it": "17 · diciassette", "translit": "satrah", "devanagari": "सत्रह", "tipo": "parola", "alternative": ["17"] },
+            { "id": "l2-18", "it": "18 · diciotto", "translit": "athaarah", "devanagari": "अठारह", "tipo": "parola", "alternative": ["18"] },
+            { "id": "l2-19", "it": "19 · diciannove", "translit": "unniis", "devanagari": "उन्नीस", "tipo": "parola", "nota": "\"un-\" + biis (20): cioè \"uno meno di venti\".", "alternative": ["19"] },
+            { "id": "l2-20", "it": "20 · venti", "translit": "biis", "devanagari": "बीस", "tipo": "parola", "alternative": ["20"] }
+          ]
+        },
+        {
+          "id": "l2-decine",
+          "titolo": "Le decine fino a 100",
+          "voci": [
+            { "id": "l2-30", "it": "30 · trenta", "translit": "tiis", "devanagari": "तीस", "tipo": "parola", "alternative": ["30"] },
+            { "id": "l2-40", "it": "40 · quaranta", "translit": "chaaliis", "devanagari": "चालीस", "tipo": "parola", "alternative": ["40"] },
+            { "id": "l2-50", "it": "50 · cinquanta", "translit": "pachaas", "devanagari": "पचास", "tipo": "parola", "alternative": ["50"] },
+            { "id": "l2-60", "it": "60 · sessanta", "translit": "saath", "devanagari": "साठ", "tipo": "parola", "nota": "Attenzione: \"saat\" è 7, \"saath\" (con la t soffiata) è 60.", "alternative": ["60"] },
+            { "id": "l2-70", "it": "70 · settanta", "translit": "sattar", "devanagari": "सत्तर", "tipo": "parola", "alternative": ["70"] },
+            { "id": "l2-80", "it": "80 · ottanta", "translit": "assii", "devanagari": "अस्सी", "tipo": "parola", "alternative": ["80"] },
+            { "id": "l2-90", "it": "90 · novanta", "translit": "nabbe", "devanagari": "नब्बे", "tipo": "parola", "alternative": ["90"] },
+            { "id": "l2-100", "it": "100 · cento", "translit": "sau", "devanagari": "सौ", "tipo": "parola", "nota": "Si dice anche \"ek sau\" (un cento).", "alternative": ["100", "एक सौ"] }
+          ]
+        },
+        {
+          "id": "l2-intermedi",
+          "titolo": "I numeri in mezzo",
+          "spiegazione": "In hindi i numeri da 21 a 99 non si compongono liberamente come in italiano: ognuno è una parola unica, da imparare. C'è però uno schema che aiuta.\n\n• L'unità viene PRIMA della decina, fuse insieme: 21 = ik + biis → ikkiis; 22 = baa + iis → baaiis; 45 = paint + chaaliis → paintaaliis.\n• Le unità cambiano un po' forma: 1 ik-, 2 baa-/ba-, 3 te-/tain-, 4 chau-, 5 pach-/pain-, 6 chha-, 7 sat-/saint-, 8 atth-/ath-.\n• I numeri che finiscono in 9 si formano con \"un-\" + la decina SUCCESSIVA: 29 = un + tiis → untiis (\"uno meno di trenta\"). Fanno eccezione 89 (navaasii) e 99 (ninyaanve).\n• Dopo il 100 diventa facile: numero + sau. 200 = do sau, 350 = tiin sau pachaas. Mille è \"hazaar\".",
+          "voci": [
+            { "id": "l2-21", "it": "21 · ventuno", "translit": "ikkiis", "devanagari": "इक्कीस", "tipo": "parola", "nota": "ik (1) + biis (20).", "alternative": ["21"] },
+            { "id": "l2-22", "it": "22 · ventidue", "translit": "baaiis", "devanagari": "बाईस", "tipo": "parola", "alternative": ["22"] },
+            { "id": "l2-25", "it": "25 · venticinque", "translit": "pachchiis", "devanagari": "पच्चीस", "tipo": "parola", "alternative": ["25"] },
+            { "id": "l2-29", "it": "29 · ventinove", "translit": "untiis", "devanagari": "उनतीस", "tipo": "parola", "nota": "un- + tiis (30): \"uno meno di trenta\".", "alternative": ["29"] },
+            { "id": "l2-35", "it": "35 · trentacinque", "translit": "paintiis", "devanagari": "पैंतीस", "tipo": "parola", "alternative": ["35"] },
+            { "id": "l2-45", "it": "45 · quarantacinque", "translit": "paintaaliis", "devanagari": "पैंतालीस", "tipo": "parola", "alternative": ["45"] },
+            { "id": "l2-99", "it": "99 · novantanove", "translit": "ninyaanve", "devanagari": "निन्यानवे", "tipo": "parola", "nota": "Un'eccezione alla regola dei numeri in 9.", "alternative": ["99", "निन्यानबे"] },
+            { "id": "l2-200", "it": "200 · duecento", "translit": "do sau", "devanagari": "दो सौ", "tipo": "parola", "alternative": ["200"] },
+            { "id": "l2-1000", "it": "1000 · mille", "translit": "ek hazaar", "devanagari": "एक हज़ार", "tipo": "parola", "alternative": ["1000", "1,000", "हज़ार"] }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "l3",
+      "titolo": "Parole di tutti i giorni",
+      "descrizione": "Famiglia, cibo, tempo, colori, luoghi e verbi di base.",
+      "lezioni": [
+        {
+          "id": "l3-famiglia",
+          "titolo": "Famiglia",
+          "voci": [
+            { "id": "l3-parivaar", "it": "famiglia", "translit": "parivaar", "devanagari": "परिवार", "tipo": "parola" },
+            { "id": "l3-maan", "it": "madre", "translit": "maan", "devanagari": "माँ", "tipo": "parola" },
+            { "id": "l3-pitaa", "it": "padre", "translit": "pitaa", "devanagari": "पिता", "tipo": "parola", "nota": "In famiglia si dice più spesso \"paapaa\". Con rispetto: \"pitaa jii\"." },
+            { "id": "l3-bhaaii", "it": "fratello", "translit": "bhaaii", "devanagari": "भाई", "tipo": "parola" },
+            { "id": "l3-bahan", "it": "sorella", "translit": "bahan", "devanagari": "बहन", "tipo": "parola", "nota": "Si pronuncia quasi \"behen\"." },
+            { "id": "l3-betaa", "it": "figlio", "translit": "betaa", "devanagari": "बेटा", "tipo": "parola" },
+            { "id": "l3-betii", "it": "figlia", "translit": "betii", "devanagari": "बेटी", "tipo": "parola" },
+            { "id": "l3-pati", "it": "marito", "translit": "pati", "devanagari": "पति", "tipo": "parola" },
+            { "id": "l3-patnii", "it": "moglie", "translit": "patnii", "devanagari": "पत्नी", "tipo": "parola" },
+            { "id": "l3-bachchaa", "it": "bambino", "translit": "bachchaa", "devanagari": "बच्चा", "tipo": "parola", "nota": "Bambina: \"bachchii\"." }
+          ]
+        },
+        {
+          "id": "l3-cibo",
+          "titolo": "Cibo e bevande",
+          "voci": [
+            { "id": "l3-khaanaa-cibo", "it": "cibo / pasto", "translit": "khaanaa", "devanagari": "खाना", "tipo": "parola", "nota": "La stessa parola è anche il verbo \"mangiare\"." },
+            { "id": "l3-paanii", "it": "acqua", "translit": "paanii", "devanagari": "पानी", "tipo": "parola" },
+            { "id": "l3-chaay", "it": "tè", "translit": "chaay", "devanagari": "चाय", "tipo": "parola" },
+            { "id": "l3-duudh", "it": "latte", "translit": "duudh", "devanagari": "दूध", "tipo": "parola" },
+            { "id": "l3-rotii", "it": "pane (indiano)", "translit": "rotii", "devanagari": "रोटी", "tipo": "parola" },
+            { "id": "l3-chaaval", "it": "riso", "translit": "chaaval", "devanagari": "चावल", "tipo": "parola" },
+            { "id": "l3-sabzii", "it": "verdura", "translit": "sabzii", "devanagari": "सब्ज़ी", "tipo": "parola" },
+            { "id": "l3-phal", "it": "frutta", "translit": "phal", "devanagari": "फल", "tipo": "parola" },
+            { "id": "l3-namak", "it": "sale", "translit": "namak", "devanagari": "नमक", "tipo": "parola" },
+            { "id": "l3-chiinii", "it": "zucchero", "translit": "chiinii", "devanagari": "चीनी", "tipo": "parola" }
+          ]
+        },
+        {
+          "id": "l3-giorni",
+          "titolo": "Giorni della settimana",
+          "voci": [
+            { "id": "l3-somvaar", "it": "lunedì", "translit": "somvaar", "devanagari": "सोमवार", "tipo": "parola" },
+            { "id": "l3-mangalvaar", "it": "martedì", "translit": "mangalvaar", "devanagari": "मंगलवार", "tipo": "parola" },
+            { "id": "l3-budhvaar", "it": "mercoledì", "translit": "budhvaar", "devanagari": "बुधवार", "tipo": "parola" },
+            { "id": "l3-guruvaar", "it": "giovedì", "translit": "guruvaar", "devanagari": "गुरुवार", "tipo": "parola" },
+            { "id": "l3-shukravaar", "it": "venerdì", "translit": "shukravaar", "devanagari": "शुक्रवार", "tipo": "parola" },
+            { "id": "l3-shanivaar", "it": "sabato", "translit": "shanivaar", "devanagari": "शनिवार", "tipo": "parola" },
+            { "id": "l3-ravivaar", "it": "domenica", "translit": "ravivaar", "devanagari": "रविवार", "tipo": "parola", "nota": "Nel parlato si sente anche \"itvaar\"." }
+          ]
+        },
+        {
+          "id": "l3-tempo",
+          "titolo": "Tempo",
+          "voci": [
+            { "id": "l3-aaj", "it": "oggi", "translit": "aaj", "devanagari": "आज", "tipo": "parola" },
+            { "id": "l3-kal", "it": "domani / ieri", "translit": "kal", "devanagari": "कल", "tipo": "parola", "nota": "Una sola parola per ieri e domani: si capisce dal tempo del verbo." },
+            { "id": "l3-abhii", "it": "adesso", "translit": "abhii", "devanagari": "अभी", "tipo": "parola" },
+            { "id": "l3-din", "it": "giorno", "translit": "din", "devanagari": "दिन", "tipo": "parola" },
+            { "id": "l3-raat", "it": "notte", "translit": "raat", "devanagari": "रात", "tipo": "parola" },
+            { "id": "l3-subah", "it": "mattina", "translit": "subah", "devanagari": "सुबह", "tipo": "parola" },
+            { "id": "l3-shaam", "it": "sera", "translit": "shaam", "devanagari": "शाम", "tipo": "parola" },
+            { "id": "l3-haftaa", "it": "settimana", "translit": "haftaa", "devanagari": "हफ़्ता", "tipo": "parola" },
+            { "id": "l3-mahiinaa", "it": "mese", "translit": "mahiinaa", "devanagari": "महीना", "tipo": "parola" },
+            { "id": "l3-saal", "it": "anno", "translit": "saal", "devanagari": "साल", "tipo": "parola" }
+          ]
+        },
+        {
+          "id": "l3-colori",
+          "titolo": "Colori",
+          "spiegazione": "Gli aggettivi che finiscono in \"-aa\" (laal no, ma niilaa, haraa, piilaa, kaalaa sì) cambiano con il nome: \"-aa\" al maschile, \"-ii\" al femminile. Esempio: niilaa → niilii. Qui trovi la forma maschile.",
+          "voci": [
+            { "id": "l3-rang", "it": "colore", "translit": "rang", "devanagari": "रंग", "tipo": "parola" },
+            { "id": "l3-laal", "it": "rosso", "translit": "laal", "devanagari": "लाल", "tipo": "parola" },
+            { "id": "l3-niilaa", "it": "blu", "translit": "niilaa", "devanagari": "नीला", "tipo": "parola" },
+            { "id": "l3-haraa", "it": "verde", "translit": "haraa", "devanagari": "हरा", "tipo": "parola" },
+            { "id": "l3-piilaa", "it": "giallo", "translit": "piilaa", "devanagari": "पीला", "tipo": "parola" },
+            { "id": "l3-safed", "it": "bianco", "translit": "safed", "devanagari": "सफ़ेद", "tipo": "parola" },
+            { "id": "l3-kaalaa", "it": "nero", "translit": "kaalaa", "devanagari": "काला", "tipo": "parola" },
+            { "id": "l3-naarangii", "it": "arancione", "translit": "naarangii", "devanagari": "नारंगी", "tipo": "parola" },
+            { "id": "l3-gulaabii", "it": "rosa", "translit": "gulaabii", "devanagari": "गुलाबी", "tipo": "parola" }
+          ]
+        },
+        {
+          "id": "l3-luoghi",
+          "titolo": "Luoghi",
+          "voci": [
+            { "id": "l3-ghar", "it": "casa", "translit": "ghar", "devanagari": "घर", "tipo": "parola" },
+            { "id": "l3-baazaar", "it": "mercato", "translit": "baazaar", "devanagari": "बाज़ार", "tipo": "parola" },
+            { "id": "l3-dukaan", "it": "negozio", "translit": "dukaan", "devanagari": "दुकान", "tipo": "parola" },
+            { "id": "l3-hotal", "it": "albergo", "translit": "hotal", "devanagari": "होटल", "tipo": "parola", "nota": "In India \"hotal\" indica spesso anche un ristorante semplice." },
+            { "id": "l3-aspataal", "it": "ospedale", "translit": "aspataal", "devanagari": "अस्पताल", "tipo": "parola" },
+            { "id": "l3-skuul", "it": "scuola", "translit": "skuul", "devanagari": "स्कूल", "tipo": "parola" },
+            { "id": "l3-shahar", "it": "città", "translit": "shahar", "devanagari": "शहर", "tipo": "parola", "nota": "Si pronuncia quasi \"sheher\"." },
+            { "id": "l3-sadak", "it": "strada", "translit": "sadak", "devanagari": "सड़क", "tipo": "parola", "nota": "La \"d\" qui è un colpo di lingua rapido, quasi una \"r\"." },
+            { "id": "l3-mandir", "it": "tempio", "translit": "mandir", "devanagari": "मंदिर", "tipo": "parola" }
+          ]
+        },
+        {
+          "id": "l3-verbi",
+          "titolo": "Verbi di base",
+          "spiegazione": "L'infinito in hindi finisce sempre in \"-naa\". Togliendo \"-naa\" resta la radice (jaa-, khaa-, pii-) a cui si attaccano le desinenze. Il verbo va in fondo alla frase.",
+          "voci": [
+            { "id": "l3-honaa", "it": "essere", "translit": "honaa", "devanagari": "होना", "tipo": "parola" },
+            { "id": "l3-jaanaa", "it": "andare", "translit": "jaanaa", "devanagari": "जाना", "tipo": "parola" },
+            { "id": "l3-aanaa", "it": "venire", "translit": "aanaa", "devanagari": "आना", "tipo": "parola" },
+            { "id": "l3-khaanaa-verbo", "it": "mangiare", "translit": "khaanaa", "devanagari": "खाना", "tipo": "parola", "nota": "La stessa parola significa anche \"cibo\"." },
+            { "id": "l3-piinaa", "it": "bere", "translit": "piinaa", "devanagari": "पीना", "tipo": "parola" },
+            { "id": "l3-chaahnaa", "it": "volere", "translit": "chaahnaa", "devanagari": "चाहना", "tipo": "parola", "nota": "Per chiedere una cosa si usa di solito \"mujhe … chaahiye\" (mi serve / vorrei)." },
+            { "id": "l3-karnaa", "it": "fare", "translit": "karnaa", "devanagari": "करना", "tipo": "parola" }
+          ]
+        },
+        {
+          "id": "l3-verbi-frasi",
+          "titolo": "Verbi in azione",
+          "spiegazione": "L'hindi non ha un verbo \"avere\": per il possesso si dice \"mere paas … hai\" (vicino a me c'è …), per fame e sete \"mujhe … lagii hai\" (a me è venuta …).",
+          "voci": [
+            { "id": "l3-main-huun", "it": "Io sono", "translit": "main huun", "devanagari": "मैं हूँ", "tipo": "frase" },
+            { "id": "l3-aap-hain", "it": "Tu sei (forma di rispetto)", "translit": "aap hain", "devanagari": "आप हैं", "tipo": "frase" },
+            { "id": "l3-mere-paas", "it": "Io ho (possiedo)", "translit": "mere paas hai", "devanagari": "मेरे पास है", "tipo": "frase", "nota": "La cosa posseduta va in mezzo: \"mere paas paanii hai\" = ho dell'acqua." },
+            { "id": "l3-bhuukh", "it": "Ho fame", "translit": "mujhe bhuukh lagii hai", "devanagari": "मुझे भूख लगी है", "tipo": "frase" },
+            { "id": "l3-pyaas", "it": "Ho sete", "translit": "mujhe pyaas lagii hai", "devanagari": "मुझे प्यास लगी है", "tipo": "frase" },
+            { "id": "l3-paanii-chaahiye", "it": "Vorrei dell'acqua", "translit": "mujhe paanii chaahiye", "devanagari": "मुझे पानी चाहिए", "tipo": "frase" },
+            { "id": "l3-ghar-jaa", "it": "Sto andando a casa", "translit": "main ghar jaa rahaa huun", "devanagari": "मैं घर जा रहा हूँ", "tipo": "frase", "nota": "Forma maschile. Una donna dice \"jaa rahii huun\"." },
+            { "id": "l3-khaa-rahaa", "it": "Sto mangiando", "translit": "main khaanaa khaa rahaa huun", "devanagari": "मैं खाना खा रहा हूँ", "tipo": "frase", "nota": "Forma maschile. Una donna dice \"khaa rahii huun\"." },
+            { "id": "l3-chaay-piitaa", "it": "Bevo il tè (di solito)", "translit": "main chaay piitaa huun", "devanagari": "मैं चाय पीता हूँ", "tipo": "frase", "nota": "Forma maschile. Una donna dice \"piitii huun\"." },
+            { "id": "l3-chaliye", "it": "Andiamo!", "translit": "chaliye", "devanagari": "चलिए", "tipo": "parola" }
+          ]
+        }
+      ]
+    }
+  ]
+}
