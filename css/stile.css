@@ -1007,3 +1007,23 @@ details summary {
   background: var(--ok-sfondo);
   color: var(--ok);
 }
+
+/* ---------- Quiz: ascolto delle risposte in hindi ---------- */
+.opzione-riga {
+  display: flex;
+  align-items: stretch;
+  gap: 0.5rem;
+}
+.opzione-riga .btn-opzione {
+  flex: 1;
+  min-width: 0;
+}
+.btn-ascolta-opzione {
+  flex: none;
+  width: 3.6rem;
+  min-height: 3.6rem;
+  padding: 0;
+}
+.centrato {
+  text-align: center;
+}

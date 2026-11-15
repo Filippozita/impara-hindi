@@ -216,7 +216,26 @@ export function avviaLezione(radice, { lezione, livello }) {
       const bottoni = opzioni.map((opzione) =>
         h('button', { class: 'btn btn-opzione', type: 'button', lang: versoHindi ? 'hi-Latn' : null, onclick: () => rispondi(opzione) }, testo(opzione)),
       );
-      metti(telaio.corpo, h('div', { class: 'carta carta-domanda' }, ...intestazione), h('div', { class: 'opzioni' }, ...bottoni), riscontro);
+      metti(telaio.corpo, h('div', { class: 'carta carta-domanda' }, ...intestazione), 
+        // Quando le risposte sono in hindi, accanto a ognuna c'è un altoparlante:
+        // si può ascoltare ogni opzione quante volte si vuole prima di sceglierla.
+        versoHindi ? h('p', { class: 'suggerimento centrato' }, 'Tocca l\'altoparlante per ascoltare, la scritta per rispondere.') : null,
+        h(
+          'div',
+          { class: 'opzioni' },
+          ...bottoni.map((bottone, k) =>
+            versoHindi
+              ? h(
+                  'div',
+                  { class: 'opzione-riga' },
+                  bottone,
+                  h('button', { class: 'btn btn-audio btn-ascolta-opzione', type: 'button', 'aria-label': 'Ascolta ' + opzioni[k].translit, onclick: () => parla(opzioni[k].devanagari) }, icona('audio')),
+                )
+              : bottone,
+          ),
+        ),
+        riscontro,
+      );
       metti(telaio.azioni);
       if (tipo === 'ascolto') parla(voce.devanagari);
 
