@@ -12,24 +12,17 @@
     "haal": "stato, condizione",
     "hai": "è",
     "sab": "tutto",
-    "svaagat": "accoglienza, benvenuto",
     "phir": "di nuovo",
     "milenge": "ci incontreremo",
-    "shubh": "buono, propizio",
-    "raatri": "notte",
     "aapkaa": "tuo (di rispetto)",
     "naam": "nome",
     "meraa": "mio",
     "marco": "Marco",
     "aapse": "con te",
     "milkar": "avendo incontrato",
-    "khushii": "gioia, piacere",
-    "huii": "c'è stato",
     "kahaan": "dove",
     "se": "da",
     "itlii": "Italia",
-    "angrezii": "inglese",
-    "bolte": "parli (parlante)",
     "thodii": "un po' di",
     "hindii": "hindi",
     "boltaa": "parlo (parlante, masch.)",
@@ -40,7 +33,6 @@
     "koii": "qualche, alcuno",
     "baat": "cosa, faccenda",
     "nahiin": "non, no",
-    "maaf": "perdono",
     "kiijiye": "faccia (gentile)",
     "jii": "(segno di rispetto)",
     "haan": "sì",
@@ -83,7 +75,13 @@
     "khaanaa": "cibo",
     "khaa": "mangiare (radice)",
     "chaay": "tè",
-    "piitaa": "bevo (bevente, masch.)"
+    "piitaa": "bevo (bevente, masch.)",
+    "gud": "buona (inglese \"good\")",
+    "naait": "notte (inglese \"night\")",
+    "achchhaa": "bello, buono",
+    "lagaa": "è sembrato, ha fatto (sensazione)",
+    "aapko": "a te (forma di rispetto)",
+    "inglish": "inglese"
   },
   "livelli": [
     {
@@ -96,15 +94,15 @@
           "titolo": "Saluti",
           "voci": [
             { "id": "l1-namaste", "it": "Ciao / Buongiorno", "translit": "namaste", "devanagari": "नमस्ते", "tipo": "parola", "nota": "Saluto universale: va bene a ogni ora, sia per arrivare sia per andare via." },
-            { "id": "l1-namaskaar", "it": "Salve (più formale)", "translit": "namaskaar", "devanagari": "नमस्कार", "tipo": "parola" },
+            { "id": "l1-helo", "it": "Ciao (informale)", "translit": "helo", "devanagari": "हेलो", "tipo": "parola", "nota": "È l'inglese \"hello\": in città e al telefono si usa tantissimo. \"namaskaar\" è invece la versione formale di namaste." },
             { "id": "l1-kaise-hain", "it": "Come stai?", "translit": "aap kaise hain?", "devanagari": "आप कैसे हैं?", "tipo": "frase", "nota": "Forma di rispetto, rivolta a un uomo. A una donna: \"aap kaisii hain?\"" },
             { "id": "l1-thiik-huun", "it": "Sto bene", "translit": "main thiik huun", "devanagari": "मैं ठीक हूँ", "tipo": "frase" },
             { "id": "l1-aur-aap", "it": "E tu?", "translit": "aur aap?", "devanagari": "और आप?", "tipo": "frase" },
             { "id": "l1-kyaa-haal", "it": "Come va? (informale)", "translit": "kyaa haal hai?", "devanagari": "क्या हाल है?", "tipo": "frase" },
             { "id": "l1-sab-thiik", "it": "Tutto bene", "translit": "sab thiik hai", "devanagari": "सब ठीक है", "tipo": "frase" },
-            { "id": "l1-svaagat", "it": "Benvenuto", "translit": "svaagat hai", "devanagari": "स्वागत है", "tipo": "frase" },
             { "id": "l1-phir-milenge", "it": "Arrivederci / Ci vediamo", "translit": "phir milenge", "devanagari": "फिर मिलेंगे", "tipo": "frase", "nota": "Letteralmente \"ci incontreremo di nuovo\"." },
-            { "id": "l1-shubh-raatri", "it": "Buonanotte", "translit": "shubh raatri", "devanagari": "शुभ रात्रि", "tipo": "frase", "nota": "Formale. Nel parlato di città si sente spesso anche l'inglese \"good night\"." }
+            { "id": "l1-baay", "it": "Ciao (quando vai via)", "translit": "baay", "devanagari": "बाय", "tipo": "parola", "nota": "È l'inglese \"bye\". Spesso raddoppiato: \"baay baay\"." },
+            { "id": "l1-gud-naait", "it": "Buonanotte", "translit": "gud naait", "devanagari": "गुड नाइट", "tipo": "frase", "nota": "È l'inglese \"good night\": oggi si dice così. \"shubh raatri\" esiste, ma suona da libro." }
           ]
         },
         {
@@ -113,10 +111,10 @@
           "voci": [
             { "id": "l1-naam-kyaa", "it": "Come ti chiami?", "translit": "aapkaa naam kyaa hai?", "devanagari": "आपका नाम क्या है?", "tipo": "frase" },
             { "id": "l1-meraa-naam", "it": "Mi chiamo Marco", "translit": "meraa naam Marco hai", "devanagari": "मेरा नाम मार्को है", "tipo": "frase", "nota": "Detto da un uomo. Una donna dice lo stesso: \"meraa naam\" concorda con \"naam\" (nome), non con chi parla." },
-            { "id": "l1-milkar-khushii", "it": "Piacere di conoscerti", "translit": "aapse milkar khushii huii", "devanagari": "आपसे मिलकर ख़ुशी हुई", "tipo": "frase" },
+            { "id": "l1-milkar-achchhaa", "it": "Piacere di conoscerti", "translit": "aapse milkar achchhaa lagaa", "devanagari": "आपसे मिलकर अच्छा लगा", "tipo": "frase", "nota": "Letteralmente \"avendoti incontrato, mi ha fatto piacere\". Uguale per uomo e donna." },
             { "id": "l1-kahaan-se", "it": "Di dove sei?", "translit": "aap kahaan se hain?", "devanagari": "आप कहाँ से हैं?", "tipo": "frase" },
             { "id": "l1-itlii-se", "it": "Vengo dall'Italia", "translit": "main Itlii se huun", "devanagari": "मैं इटली से हूँ", "tipo": "frase", "nota": "\"Itlii\" è il nome dell'Italia in hindi." },
-            { "id": "l1-angrezii", "it": "Parli inglese?", "translit": "kyaa aap angrezii bolte hain?", "devanagari": "क्या आप अंग्रेज़ी बोलते हैं?", "tipo": "frase", "nota": "Rivolta a un uomo. A una donna: \"boltii hain\".", "parole": { "kyaa": "(apre una domanda sì/no)" } },
+            { "id": "l1-inglish", "it": "Parli inglese?", "translit": "aapko inglish aatii hai?", "devanagari": "आपको इंग्लिश आती है?", "tipo": "frase", "nota": "Letteralmente \"a te l'inglese viene?\". Uguale per uomo e donna. La parola hindi \"angrezii\" si sente meno." },
             { "id": "l1-thodii-hindii", "it": "Parlo un po' di hindi", "translit": "main thodii hindii boltaa huun", "devanagari": "मैं थोड़ी हिंदी बोलता हूँ", "tipo": "frase", "nota": "Forma maschile. Una donna dice \"boltii huun\"." },
             { "id": "l1-siikh-rahaa", "it": "Sto imparando l'hindi", "translit": "main hindii siikh rahaa huun", "devanagari": "मैं हिंदी सीख रहा हूँ", "tipo": "frase", "nota": "Forma maschile. Una donna dice \"siikh rahii huun\"." },
             { "id": "l1-meraa-dost", "it": "Questo è il mio amico", "translit": "ye meraa dost hai", "devanagari": "ये मेरा दोस्त है", "tipo": "frase", "nota": "Per un'amica: \"ye merii dost hai\"." }
@@ -126,11 +124,11 @@
           "id": "l1-cortesia",
           "titolo": "Cortesia, sì e no",
           "voci": [
-            { "id": "l1-dhanyavaad", "it": "Grazie", "translit": "dhanyavaad", "devanagari": "धन्यवाद", "tipo": "parola" },
-            { "id": "l1-shukriyaa", "it": "Grazie (colloquiale)", "translit": "shukriyaa", "devanagari": "शुक्रिया", "tipo": "parola" },
+            { "id": "l1-dhanyavaad", "it": "Grazie", "translit": "dhanyavaad", "devanagari": "धन्यवाद", "tipo": "parola", "nota": "Corretto ma un po' formale. Nei negozi e tra amici si sente più spesso \"thainkyuu\" (thank you) o \"shukriyaa\"." },
+            { "id": "l1-shukriyaa", "it": "Grazie (colloquiale)", "translit": "shukriyaa", "devanagari": "शुक्रिया", "tipo": "parola", "nota": "Molto usato nel parlato, insieme all'inglese \"thainkyuu\"." },
             { "id": "l1-koii-baat", "it": "Prego / Di niente", "translit": "koii baat nahiin", "devanagari": "कोई बात नहीं", "tipo": "frase", "nota": "Letteralmente \"non è niente\". Si usa anche per \"non fa niente\"." },
-            { "id": "l1-maaf", "it": "Scusa / Mi dispiace", "translit": "maaf kiijiye", "devanagari": "माफ़ कीजिए", "tipo": "frase" },
-            { "id": "l1-kripayaa", "it": "Per favore", "translit": "kripayaa", "devanagari": "कृपया", "tipo": "parola", "nota": "Piuttosto formale. Nel parlato basta la forma gentile del verbo, che finisce in \"-iye\" (boliye, suniye)." },
+            { "id": "l1-sorii", "it": "Scusa / Mi dispiace", "translit": "sorii", "devanagari": "सॉरी", "tipo": "parola", "nota": "È l'inglese \"sorry\", il modo più comune. Più formale: \"maaf kiijiye\"." },
+            { "id": "l1-pliiz", "it": "Per favore", "translit": "pliiz", "devanagari": "प्लीज़", "tipo": "parola", "nota": "È l'inglese \"please\", messo di solito a fine frase: \"dhiire boliye pliiz\". La parola hindi \"kripayaa\" si trova solo su cartelli e annunci." },
             { "id": "l1-suniye", "it": "Senta, scusi! (per chiamare qualcuno)", "translit": "suniye", "devanagari": "सुनिए", "tipo": "parola" },
             { "id": "l1-haan", "it": "Sì", "translit": "haan", "devanagari": "हाँ", "tipo": "parola" },
             { "id": "l1-jii-haan", "it": "Sì (rispettoso)", "translit": "jii haan", "devanagari": "जी हाँ", "tipo": "frase", "nota": "\"jii\" aggiunge rispetto: si mette anche dopo i nomi." },
@@ -273,15 +271,15 @@
           "id": "l3-famiglia",
           "titolo": "Famiglia",
           "voci": [
-            { "id": "l3-parivaar", "it": "famiglia", "translit": "parivaar", "devanagari": "परिवार", "tipo": "parola" },
-            { "id": "l3-maan", "it": "madre", "translit": "maan", "devanagari": "माँ", "tipo": "parola" },
-            { "id": "l3-pitaa", "it": "padre", "translit": "pitaa", "devanagari": "पिता", "tipo": "parola", "nota": "In famiglia si dice più spesso \"paapaa\". Con rispetto: \"pitaa jii\"." },
+            { "id": "l3-faimilii", "it": "famiglia", "translit": "faimilii", "devanagari": "फ़ैमिली", "tipo": "parola", "nota": "Dall'inglese \"family\". La parola hindi \"parivaar\" è più formale." },
+            { "id": "l3-maan", "it": "madre", "translit": "maan", "devanagari": "माँ", "tipo": "parola", "nota": "In famiglia anche \"mammii\"." },
+            { "id": "l3-paapaa", "it": "papà", "translit": "paapaa", "devanagari": "पापा", "tipo": "parola", "nota": "La parola formale per \"padre\" è \"pitaa\": in famiglia non la usa quasi nessuno." },
             { "id": "l3-bhaaii", "it": "fratello", "translit": "bhaaii", "devanagari": "भाई", "tipo": "parola" },
             { "id": "l3-bahan", "it": "sorella", "translit": "bahan", "devanagari": "बहन", "tipo": "parola", "nota": "Si pronuncia quasi \"behen\"." },
             { "id": "l3-betaa", "it": "figlio", "translit": "betaa", "devanagari": "बेटा", "tipo": "parola" },
             { "id": "l3-betii", "it": "figlia", "translit": "betii", "devanagari": "बेटी", "tipo": "parola" },
-            { "id": "l3-pati", "it": "marito", "translit": "pati", "devanagari": "पति", "tipo": "parola" },
-            { "id": "l3-patnii", "it": "moglie", "translit": "patnii", "devanagari": "पत्नी", "tipo": "parola" },
+            { "id": "l3-pati", "it": "marito", "translit": "pati", "devanagari": "पति", "tipo": "parola", "nota": "In città si sente spesso anche l'inglese \"hasband\"." },
+            { "id": "l3-patnii", "it": "moglie", "translit": "patnii", "devanagari": "पत्नी", "tipo": "parola", "nota": "Nel parlato anche \"waaif\" (wife) o \"biivii\"." },
             { "id": "l3-bachchaa", "it": "bambino", "translit": "bachchaa", "devanagari": "बच्चा", "tipo": "parola", "nota": "Bambina: \"bachchii\"." }
           ]
         },
@@ -311,7 +309,7 @@
             { "id": "l3-guruvaar", "it": "giovedì", "translit": "guruvaar", "devanagari": "गुरुवार", "tipo": "parola" },
             { "id": "l3-shukravaar", "it": "venerdì", "translit": "shukravaar", "devanagari": "शुक्रवार", "tipo": "parola" },
             { "id": "l3-shanivaar", "it": "sabato", "translit": "shanivaar", "devanagari": "शनिवार", "tipo": "parola" },
-            { "id": "l3-ravivaar", "it": "domenica", "translit": "ravivaar", "devanagari": "रविवार", "tipo": "parola", "nota": "Nel parlato si sente anche \"itvaar\"." }
+            { "id": "l3-ravivaar", "it": "domenica", "translit": "ravivaar", "devanagari": "रविवार", "tipo": "parola", "nota": "Nel parlato anche \"itvaar\", o all'inglese \"sande\"." }
           ]
         },
         {
@@ -342,8 +340,8 @@
             { "id": "l3-piilaa", "it": "giallo", "translit": "piilaa", "devanagari": "पीला", "tipo": "parola" },
             { "id": "l3-safed", "it": "bianco", "translit": "safed", "devanagari": "सफ़ेद", "tipo": "parola" },
             { "id": "l3-kaalaa", "it": "nero", "translit": "kaalaa", "devanagari": "काला", "tipo": "parola" },
-            { "id": "l3-naarangii", "it": "arancione", "translit": "naarangii", "devanagari": "नारंगी", "tipo": "parola" },
-            { "id": "l3-gulaabii", "it": "rosa", "translit": "gulaabii", "devanagari": "गुलाबी", "tipo": "parola" }
+            { "id": "l3-naarangii", "it": "arancione", "translit": "naarangii", "devanagari": "नारंगी", "tipo": "parola", "nota": "In città spesso si dice all'inglese: \"orenj\"." },
+            { "id": "l3-gulaabii", "it": "rosa", "translit": "gulaabii", "devanagari": "गुलाबी", "tipo": "parola", "nota": "In città spesso si dice all'inglese: \"pink\"." }
           ]
         },
         {
@@ -354,7 +352,7 @@
             { "id": "l3-baazaar", "it": "mercato", "translit": "baazaar", "devanagari": "बाज़ार", "tipo": "parola" },
             { "id": "l3-dukaan", "it": "negozio", "translit": "dukaan", "devanagari": "दुकान", "tipo": "parola" },
             { "id": "l3-hotal", "it": "albergo", "translit": "hotal", "devanagari": "होटल", "tipo": "parola", "nota": "In India \"hotal\" indica spesso anche un ristorante semplice." },
-            { "id": "l3-aspataal", "it": "ospedale", "translit": "aspataal", "devanagari": "अस्पताल", "tipo": "parola" },
+            { "id": "l3-haspital", "it": "ospedale", "translit": "haspital", "devanagari": "हॉस्पिटल", "tipo": "parola", "nota": "Dall'inglese \"hospital\". La forma hindi \"aspataal\" si sente meno." },
             { "id": "l3-skuul", "it": "scuola", "translit": "skuul", "devanagari": "स्कूल", "tipo": "parola" },
             { "id": "l3-shahar", "it": "città", "translit": "shahar", "devanagari": "शहर", "tipo": "parola", "nota": "Si pronuncia quasi \"sheher\"." },
             { "id": "l3-sadak", "it": "strada", "translit": "sadak", "devanagari": "सड़क", "tipo": "parola", "nota": "La \"d\" qui è un colpo di lingua rapido, quasi una \"r\"." },

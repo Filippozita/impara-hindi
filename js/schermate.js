@@ -204,7 +204,34 @@ export function progressi(radice) {
       h('p', { class: 'suggerimento' }, 'Ogni risposta giusta sposta la voce nella scatola successiva, che si ripassa più di rado: subito, dopo 1, 3, 7 e 14 giorni.'),
       h('div', { class: 'scatole' }, ...scatole.map((quante, i) => h('div', { class: 'scatola' }, h('span', { class: 'scatola-n' }, String(quante)), h('div', { class: 'scatola-colonna' }, h('div', { style: `height:${Math.round((quante / massimo) * 100)}%` })), h('span', { class: 'sotto' }, String(i + 1))))),
     ),
+    h(
+      'section',
+      { class: 'scheda' },
+      h('p', { class: 'etichetta' }, 'Voce per voce'),
+      h('p', { class: 'suggerimento' }, 'Tocca una lezione per vedere a che punto è ogni parola o frase.'),
+      ...dati.tuttiILivelli().flatMap((livello) =>
+        livello.lezioni.map((lezione) => {
+          const sapute = lezione.voci.filter((v) => stato.leggiVoce(v.id).scatola >= stato.SCATOLA_IMPARATA).length;
+          const viste = lezione.voci.filter((v) => stato.leggiVoce(v.id).scatola >= 1).length;
+          return h(
+            'details',
+            { class: 'dettaglio-lezione' },
+            h('summary', {}, h('span', {}, lezione.titolo), h('span', { class: 'sotto' }, viste === 0 ? 'da fare' : `${sapute} imparate · ${viste} di ${lezione.voci.length} studiate`)),
+            h('ul', {}, ...lezione.voci.map((voce) => h('li', {}, h('span', {}, h('strong', { lang: 'hi-Latn' }, voce.translit), h('span', { class: 'sotto' }, voce.it)), etichettaStato(voce)))),
+          );
+        }),
+      ),
+    ),
   );
+}
+
+/** Piccola etichetta con lo stato di una voce: nuova, da ripassare, in corso, imparata. */
+function etichettaStato(voce) {
+  const v = stato.leggiVoce(voce.id);
+  if (v.scatola === 0) return h('span', { class: 'stato stato-nuova' }, 'nuova');
+  if (v.debole) return h('span', { class: 'stato stato-debole' }, 'da ripassare');
+  if (v.scatola >= stato.SCATOLA_IMPARATA) return h('span', { class: 'stato stato-imparata' }, `imparata · ${v.scatola}/5`);
+  return h('span', { class: 'stato stato-corso' }, `in corso · ${v.scatola}/5`);
 }
 
 // ---------- Come si legge ----------
@@ -266,6 +293,7 @@ export function comeSiLegge(radice) {
         ),
       ),
     ),
+    h('section', { class: 'scheda' }, h('p', { class: 'etichetta' }, 'Parole inglesi'), h('p', {}, 'L\'hindi che si parla oggi è pieno di parole inglesi: l\'app insegna quelle che si usano davvero, scritte come suonano con lo stesso schema (gud naait = good night, sorii = sorry, pliiz = please). Quando esiste una parola hindi più formale, la trovi nella nota.')),
     h('section', { class: 'scheda' }, h('p', { class: 'etichetta' }, 'Uomo o donna'), h('p', {}, 'In hindi molti verbi cambiano se chi parla è un uomo o una donna (-aa al maschile, -ii al femminile). Le frasi dell\'app usano la forma maschile; quando esiste una forma femminile diversa, una nota la riporta.')),
   );
 }
