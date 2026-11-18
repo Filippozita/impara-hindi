@@ -106,7 +106,7 @@ export function livelli(radice) {
             'ul',
             { class: 'elenco-lezioni' },
             ...livello.lezioni.map((lezione) => {
-              const fatta = stato.lezioneCompletata(lezione.id);
+              const fatta = dati.lezioneFatta(lezione);
               const eProssima = Boolean(prossima && prossima.lezione.id === lezione.id);
               return h(
                 'li',

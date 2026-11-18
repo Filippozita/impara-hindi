@@ -24,9 +24,9 @@
     "itlii": "Italia",
     "thodii": "un po' di",
     "hindii": "hindi",
-    "boltaa": "parlo (parlante, masch.)",
+    "boltaa": "parlo, parla (masch.)",
     "siikh": "imparare (radice)",
-    "rahaa": "sto …-ndo (masch.)",
+    "rahaa": "sto, sta …-ndo (masch.)",
     "ye": "questo, questa",
     "dost": "amico",
     "koii": "qualche, alcuno",
@@ -74,7 +74,7 @@
     "khaanaa": "cibo",
     "khaa": "mangiare (radice)",
     "chaay": "tè",
-    "piitaa": "bevo (bevente, masch.)",
+    "piitaa": "bevo (masch.)",
     "gud": "buona (inglese \"good\")",
     "naait": "notte (inglese \"night\")",
     "achchhaa": "bello, buono",
@@ -95,7 +95,30 @@
     "uskaa": "suo (di lui, di lei)",
     "pyaaraa": "carino",
     "ke": "di",
-    "saath": "insieme"
+    "saath": "insieme",
+    "bolte": "parli, parliamo, parlano",
+    "boltii": "parlo, parla (femm.)",
+    "khaataa": "mangio (masch.)",
+    "jaataa": "vado (masch.)",
+    "aataa": "vengo (masch.)",
+    "kartaa": "faccio (masch.)",
+    "samajhtaa": "capisco (masch.)",
+    "jaantaa": "so, conosco (masch.)",
+    "rahtaa": "abito (masch.)",
+    "rahte": "abiti, abitate",
+    "kaam": "lavoro",
+    "karte": "fai, fate, fanno",
+    "bol": "parlare (radice)",
+    "aa": "venire (radice)",
+    "kar": "fare (radice)",
+    "so": "dormire (radice)",
+    "rahii": "sto, sta …-ndo (femm.)",
+    "rahe": "stai, stiamo, stanno …-ndo",
+    "jaanaa": "andare",
+    "chaahtaa": "voglio (masch.)",
+    "saktaa": "posso (masch.)",
+    "pasand": "gradito, che piace",
+    "diijiye": "dia (gentile)"
   },
   "livelli": [
     {
@@ -212,6 +235,91 @@
             { "id": "l0-kaa", "it": "di (possesso)", "translit": "kaa", "devanagari": "का", "tipo": "parola", "nota": "Dopo il possessore: \"Filippo kaa ghar\" = la casa di Filippo." },
             { "id": "l0-yahaan", "it": "qui", "translit": "yahaan", "devanagari": "यहाँ", "tipo": "parola" },
             { "id": "l0-vahaan", "it": "là", "translit": "vahaan", "devanagari": "वहाँ", "tipo": "parola" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "lv",
+      "titolo": "I verbi al presente",
+      "descrizione": "Io parlo, tu vai, lui mangia. Sto facendo. Voglio, posso, mi piace.",
+      "aperto": true,
+      "lezioni": [
+        {
+          "id": "lv-presente",
+          "titolo": "Io parlo, tu parli",
+          "spiegazione": "Il presente si fa in due pezzi: il verbo + \"essere\".\n\nSi toglie \"-naa\" dall'infinito (bolnaa → bol) e si aggiunge:\n• -taa se chi fa l'azione è un uomo (main boltaa, vo boltaa)\n• -tii se è una donna (main boltii, vo boltii)\n• -te con aap, tum, ham e \"loro\" (aap bolte, ham bolte)\n\nPoi si chiude con huun / ho / hai / hain, come hai già imparato. Funziona così per tutti i verbi.",
+          "voci": [
+            { "id": "lv-main-boltaa", "it": "Io parlo", "translit": "main boltaa huun", "devanagari": "मैं बोलता हूँ", "tipo": "frase", "nota": "Forma maschile. Una donna dice \"main boltii huun\"." },
+            { "id": "lv-aap-bolte", "it": "Tu parli (forma di rispetto)", "translit": "aap bolte hain", "devanagari": "आप बोलते हैं", "tipo": "frase", "nota": "A una donna: \"aap boltii hain\"." },
+            { "id": "lv-tum-bolte", "it": "Tu parli (tra amici)", "translit": "tum bolte ho", "devanagari": "तुम बोलते हो", "tipo": "frase", "nota": "A una donna: \"tum boltii ho\"." },
+            { "id": "lv-vo-boltaa", "it": "Lui parla", "translit": "vo boltaa hai", "devanagari": "वो बोलता है", "tipo": "frase" },
+            { "id": "lv-vo-boltii", "it": "Lei parla", "translit": "vo boltii hai", "devanagari": "वो बोलती है", "tipo": "frase" },
+            { "id": "lv-ham-bolte", "it": "Noi parliamo", "translit": "ham bolte hain", "devanagari": "हम बोलते हैं", "tipo": "frase" },
+            { "id": "lv-vo-log-bolte", "it": "Loro parlano", "translit": "vo log bolte hain", "devanagari": "वो लोग बोलते हैं", "tipo": "frase" },
+            { "id": "lv-nahiin-boltaa", "it": "Io non parlo", "translit": "main nahiin boltaa", "devanagari": "मैं नहीं बोलता", "tipo": "frase", "nota": "Nelle frasi negative \"huun\" di solito si omette. Forma maschile. Una donna dice \"main nahiin boltii\"." }
+          ]
+        },
+        {
+          "id": "lv-quotidiani",
+          "titolo": "I verbi di ogni giorno",
+          "spiegazione": "Stessa regola, altri verbi. Tutte le frasi qui sono dette da un uomo: una donna cambia \"-taa\" in \"-tii\" (main khaatii huun, main jaatii huun).",
+          "voci": [
+            { "id": "lv-khaataa", "it": "Io mangio", "translit": "main khaataa huun", "devanagari": "मैं खाता हूँ", "tipo": "frase" },
+            { "id": "lv-jaataa", "it": "Io vado", "translit": "main jaataa huun", "devanagari": "मैं जाता हूँ", "tipo": "frase" },
+            { "id": "lv-aataa", "it": "Io vengo", "translit": "main aataa huun", "devanagari": "मैं आता हूँ", "tipo": "frase" },
+            { "id": "lv-kartaa", "it": "Io faccio", "translit": "main kartaa huun", "devanagari": "मैं करता हूँ", "tipo": "frase" },
+            { "id": "lv-samajhtaa", "it": "Io capisco", "translit": "main samajhtaa huun", "devanagari": "मैं समझता हूँ", "tipo": "frase" },
+            { "id": "lv-jaantaa", "it": "Io so / lo so", "translit": "main jaantaa huun", "devanagari": "मैं जानता हूँ", "tipo": "frase" },
+            { "id": "lv-rahtaa", "it": "Abito in Italia", "translit": "main Itlii men rahtaa huun", "devanagari": "मैं इटली में रहता हूँ", "tipo": "frase", "nota": "\"rahnaa\" = abitare, restare." },
+            { "id": "lv-kaam-kartaa", "it": "Io lavoro", "translit": "main kaam kartaa huun", "devanagari": "मैं काम करता हूँ", "tipo": "frase", "nota": "Letteralmente \"faccio lavoro\"." },
+            { "id": "lv-kyaa-karte", "it": "Tu cosa fai? (di lavoro)", "translit": "aap kyaa karte hain?", "devanagari": "आप क्या करते हैं?", "tipo": "frase" },
+            { "id": "lv-kahaan-rahte", "it": "Dove abiti?", "translit": "aap kahaan rahte hain?", "devanagari": "आप कहाँ रहते हैं?", "tipo": "frase" }
+          ]
+        },
+        {
+          "id": "lv-adesso",
+          "titolo": "Adesso: sto facendo",
+          "spiegazione": "Per dire cosa stai facendo in questo momento: radice del verbo + rahaa + essere.\n\n• rahaa per un uomo (main bol rahaa huun)\n• rahii per una donna (main bol rahii huun)\n• rahe con aap, tum, ham e \"loro\" (aap bol rahe hain)\n\nNel parlato si usa moltissimo, più del presente semplice.",
+          "voci": [
+            { "id": "lv-bol-rahaa", "it": "Sto parlando", "translit": "main bol rahaa huun", "devanagari": "मैं बोल रहा हूँ", "tipo": "frase", "nota": "Forma maschile. Una donna dice \"bol rahii huun\"." },
+            { "id": "lv-aa-rahaa", "it": "Sto arrivando", "translit": "main aa rahaa huun", "devanagari": "मैं आ रहा हूँ", "tipo": "frase", "nota": "Forma maschile. Una donna dice \"aa rahii huun\"." },
+            { "id": "lv-kaam-kar-rahaa", "it": "Sto lavorando", "translit": "main kaam kar rahaa huun", "devanagari": "मैं काम कर रहा हूँ", "tipo": "frase", "nota": "Forma maschile. Una donna dice \"kar rahii huun\"." },
+            { "id": "lv-kyaa-kar-rahe", "it": "Cosa stai facendo?", "translit": "aap kyaa kar rahe hain?", "devanagari": "आप क्या कर रहे हैं?", "tipo": "frase" },
+            { "id": "lv-kahaan-jaa-rahe", "it": "Dove stai andando?", "translit": "aap kahaan jaa rahe hain?", "devanagari": "आप कहाँ जा रहे हैं?", "tipo": "frase" },
+            { "id": "lv-vo-khaa-rahaa", "it": "Lui sta mangiando", "translit": "vo khaa rahaa hai", "devanagari": "वो खा रहा है", "tipo": "frase" },
+            { "id": "lv-vo-so-rahii", "it": "Lei sta dormendo", "translit": "vo so rahii hai", "devanagari": "वो सो रही है", "tipo": "frase" },
+            { "id": "lv-ham-jaa-rahe", "it": "Stiamo andando", "translit": "ham jaa rahe hain", "devanagari": "हम जा रहे हैं", "tipo": "frase" }
+          ]
+        },
+        {
+          "id": "lv-volere",
+          "titolo": "Voglio, posso, mi piace",
+          "spiegazione": "Tre costruzioni che servono sempre:\n\n• Voglio + verbo: infinito + chaahtaa huun → \"main jaanaa chaahtaa huun\" (voglio andare).\n• Posso + verbo: radice + saktaa huun → \"main aa saktaa huun\" (posso venire).\n• Mi piace: \"mujhe … pasand hai\", letteralmente \"a me … è gradito\". È uguale per uomo e donna.",
+          "voci": [
+            { "id": "lv-jaanaa-chaahtaa", "it": "Voglio andare", "translit": "main jaanaa chaahtaa huun", "devanagari": "मैं जाना चाहता हूँ", "tipo": "frase", "nota": "Forma maschile. Una donna dice \"chaahtii huun\"." },
+            { "id": "lv-khaanaa-chaahtaa", "it": "Voglio mangiare", "translit": "main khaanaa chaahtaa huun", "devanagari": "मैं खाना चाहता हूँ", "tipo": "frase", "nota": "Forma maschile. Una donna dice \"chaahtii huun\".", "parole": { "khaanaa": "mangiare" } },
+            { "id": "lv-aa-saktaa", "it": "Posso venire", "translit": "main aa saktaa huun", "devanagari": "मैं आ सकता हूँ", "tipo": "frase", "nota": "Forma maschile. Una donna dice \"aa saktii huun\"." },
+            { "id": "lv-nahiin-saktaa", "it": "Non posso (farlo)", "translit": "main nahiin kar saktaa", "devanagari": "मैं नहीं कर सकता", "tipo": "frase", "nota": "Forma maschile. Una donna dice \"kar saktii\"." },
+            { "id": "lv-pasand", "it": "Mi piace", "translit": "mujhe pasand hai", "devanagari": "मुझे पसंद है", "tipo": "frase" },
+            { "id": "lv-chaay-pasand", "it": "Mi piace il tè", "translit": "mujhe chaay pasand hai", "devanagari": "मुझे चाय पसंद है", "tipo": "frase" },
+            { "id": "lv-pasand-nahiin", "it": "Non mi piace", "translit": "mujhe pasand nahiin hai", "devanagari": "मुझे पसंद नहीं है", "tipo": "frase" },
+            { "id": "lv-jaanaa-hai", "it": "Devo andare", "translit": "mujhe jaanaa hai", "devanagari": "मुझे जाना है", "tipo": "frase", "nota": "Letteralmente \"a me è da andare\". Uguale per uomo e donna." }
+          ]
+        },
+        {
+          "id": "lv-chiedere",
+          "titolo": "Chiedere a qualcuno di fare",
+          "spiegazione": "Per chiedere gentilmente a qualcuno di fare una cosa si aggiunge \"-iye\" alla radice: baith → baithiye (si sieda, siediti pure). È la forma che va con \"aap\".\n\nTra amici, con \"tum\", si usa \"-o\": baitho, aao.",
+          "voci": [
+            { "id": "lv-aaiye", "it": "Venga / Prego, entri", "translit": "aaiye", "devanagari": "आइए", "tipo": "parola" },
+            { "id": "lv-baithiye", "it": "Si sieda", "translit": "baithiye", "devanagari": "बैठिए", "tipo": "parola" },
+            { "id": "lv-dekhiye", "it": "Guardi", "translit": "dekhiye", "devanagari": "देखिए", "tipo": "parola" },
+            { "id": "lv-rukiye", "it": "Aspetti / Si fermi", "translit": "rukiye", "devanagari": "रुकिए", "tipo": "parola", "nota": "Utile in taxi e in risciò." },
+            { "id": "lv-khaaiye", "it": "Mangi pure", "translit": "khaaiye", "devanagari": "खाइए", "tipo": "parola" },
+            { "id": "lv-ye-diijiye", "it": "Mi dia questo", "translit": "ye diijiye", "devanagari": "ये दीजिए", "tipo": "frase" },
+            { "id": "lv-aao", "it": "Vieni (tra amici)", "translit": "aao", "devanagari": "आओ", "tipo": "parola" },
+            { "id": "lv-baitho", "it": "Siediti (tra amici)", "translit": "baitho", "devanagari": "बैठो", "tipo": "parola" }
           ]
         }
       ]

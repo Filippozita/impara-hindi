@@ -56,7 +56,7 @@ Si modifica solo `contenuti.json`. La struttura è:
 Regole:
 
 - Ogni `id` (di livello, lezione e voce) deve essere **unico** e non va più cambiato: i progressi sono legati agli id.
-- Ogni lezione ha da 5 a 10 voci (minimo 4, servono per le risposte del quiz).
+- Ogni lezione ha da 5 a 10 voci (minimo 4). L'app la spezza da sola in mini-lezioni da 3 voci al massimo: per cambiare il numero, `MAX_VOCI_PER_LEZIONE` in `js/dati.js`.
 - `tipo` è `"parola"` oppure `"frase"`.
 - `devanagari` è obbligatorio e non viene mai mostrato. `it`, `translit` e `nota` non devono contenere devanagari.
 - `translit` segue lo schema della schermata "Come si legge" (vocali lunghe doppie: `aa`, `ii`, `uu`).

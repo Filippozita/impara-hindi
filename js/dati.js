@@ -11,11 +11,44 @@ const lezioniPerId = new Map();
 /** Percentuale minima del livello precedente per sbloccare il successivo. */
 export const SOGLIA_SBLOCCO = 0.8;
 
+/** Quante voci al massimo in una mini-lezione: poche, così si ricordano. */
+export const MAX_VOCI_PER_LEZIONE = 3;
+
+/**
+ * Spezza una lezione dei contenuti in parti da al massimo MAX_VOCI_PER_LEZIONE voci,
+ * il più possibile uguali (10 voci → 3, 3, 2, 2). Ogni parte è una lezione a sé, con id
+ * "idOriginale~numero"; la spiegazione resta sulla prima parte.
+ */
+function dividi(lezione) {
+  const voci = lezione.voci || [];
+  const parti = Math.ceil(voci.length / MAX_VOCI_PER_LEZIONE);
+  if (parti <= 1) return [lezione];
+  const risultato = [];
+  let inizio = 0;
+  for (let k = 0; k < parti; k++) {
+    const quante = Math.ceil((voci.length - inizio) / (parti - k));
+    risultato.push({
+      id: `${lezione.id}~${k + 1}`,
+      origine: lezione.id,
+      titolo: `${lezione.titolo} ${k + 1}/${parti}`,
+      spiegazione: k === 0 ? lezione.spiegazione : undefined,
+      voci: voci.slice(inizio, inizio + quante),
+    });
+    inizio += quante;
+  }
+  return risultato;
+}
+
+/** Una mini-lezione è fatta se è stata completata lei, oppure (prima della divisione) la lezione intera. */
+export const lezioneFatta = (lezione) => stato.lezioneCompletata(lezione.id) || Boolean(lezione.origine && stato.lezioneCompletata(lezione.origine));
+
 export async function caricaContenuti() {
   const risposta = await fetch('./contenuti.json');
   if (!risposta.ok) throw new Error('Impossibile caricare i contenuti.');
   const dati = await risposta.json();
   livelli = Array.isArray(dati.livelli) ? dati.livelli : [];
+  // Le lezioni dei contenuti vengono spezzate in mini-lezioni da poche voci.
+  livelli = livelli.map((livello) => ({ ...livello, lezioni: (livello.lezioni || []).flatMap(dividi) }));
   glossario = dati.glossario && typeof dati.glossario === 'object' ? dati.glossario : {};
   vociPerId.clear();
   lezioniPerId.clear();
@@ -54,7 +87,7 @@ export function prossimaLezione() {
   for (let i = 0; i < livelli.length; i++) {
     if (!livelloSbloccato(i)) break;
     for (const lezione of livelli[i].lezioni) {
-      if (!stato.lezioneCompletata(lezione.id)) return { lezione, livello: livelli[i] };
+      if (!lezioneFatta(lezione)) return { lezione, livello: livelli[i] };
     }
   }
   return null;
