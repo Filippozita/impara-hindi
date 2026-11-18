@@ -44,6 +44,8 @@ export function avanzamentoLivello(livello) {
 /** Il primo livello è sempre aperto; gli altri quando il precedente è almeno all'80%. */
 export function livelloSbloccato(indice) {
   if (indice <= 0) return true;
+  // Un livello con "aperto": true nei contenuti è sempre disponibile.
+  if (livelli[indice] && livelli[indice].aperto === true) return true;
   return livelloSbloccato(indice - 1) && avanzamentoLivello(livelli[indice - 1]) >= SOGLIA_SBLOCCO;
 }
 
