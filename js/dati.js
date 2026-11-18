@@ -30,6 +30,7 @@ function dividi(lezione) {
     risultato.push({
       id: `${lezione.id}~${k + 1}`,
       origine: lezione.id,
+      titoloBase: lezione.titolo,
       titolo: `${lezione.titolo} ${k + 1}/${parti}`,
       spiegazione: k === 0 ? lezione.spiegazione : undefined,
       voci: voci.slice(inizio, inizio + quante),

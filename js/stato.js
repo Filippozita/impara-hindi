@@ -19,7 +19,7 @@ export const INTERVALLI = [0, 0, 1, 3, 7, 14];
 export const SCATOLA_IMPARATA = 3;
 
 function statoVuoto() {
-  return { versione: 1, voci: {}, lezioni: {}, giorni: {}, impostazioni: { tema: 'auto' } };
+  return { versione: 1, voci: {}, lezioni: {}, giorni: {}, impostazioni: { tema: 'auto', pronuncia: true } };
 }
 
 let stato = statoVuoto();
@@ -230,4 +230,10 @@ export function ultimiGiorni(n = 7) {
     elenco.push({ data, attivo: Boolean(g && (g.risposte > 0 || g.sessioni > 0)) });
   }
   return elenco;
+}
+
+/** Attiva o disattiva l'esercizio di pronuncia nelle lezioni. */
+export function impostaPronuncia(attiva) {
+  stato.impostazioni.pronuncia = Boolean(attiva);
+  salva();
 }

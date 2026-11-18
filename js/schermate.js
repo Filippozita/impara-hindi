@@ -68,7 +68,7 @@ export function home(radice) {
       ? h(
           'section',
           { class: 'scheda scheda-riga' },
-          h('div', {}, h('h2', {}, 'Ripasso di oggi'), h('p', { class: 'sotto' }, `${plurale(daFare, 'voce', 'voci')} in scadenza, un paio di minuti`)),
+          h('div', {}, h('h2', {}, 'Ripasso di oggi'), h('p', { class: 'sotto' }, `${plurale(daFare, 'voce', 'voci')} in scadenza, ${Math.min(daFare, 10)} alla volta`)),
           h('button', { class: 'btn btn-primario btn-stretto', type: 'button', onclick: () => vai('ripasso') }, 'Ripassa'),
         )
       : null,
@@ -82,6 +82,17 @@ export function home(radice) {
           h('button', { class: 'btn btn-primario', type: 'button', onclick: () => vai('lezione/' + prossima.lezione.id) }, iniziata ? 'Continua' : 'Inizia'),
         )
       : h('section', { class: 'scheda scheda-forte' }, h('h2', {}, 'Hai completato tutte le lezioni'), h('p', { class: 'sotto' }, 'Continua con il ripasso, oppure rifai una lezione.'), h('button', { class: 'btn btn-primario', type: 'button', onclick: () => vai('livelli') }, 'Vai alle lezioni')),
+    // Solo la prima volta: come funziona, e una prova dell'audio prima di cominciare.
+    iniziata
+      ? null
+      : h(
+          'section',
+          { class: 'scheda' },
+          h('h2', {}, 'Come funziona'),
+          h('p', {}, 'Ogni lezione ha tre parole: le ascolti, provi a ricordarle, fai un quiz. Due minuti e hai finito.'),
+          h('p', { class: 'sotto' }, 'Quelle che non ricordi tornano da sole nel ripasso, finché restano.'),
+          h('button', { class: 'btn btn-secondario', type: 'button', onclick: () => parla('नमस्ते') }, icona('audio'), 'Prova l\'audio'),
+        ),
     iniziata
       ? null
       : h('button', { class: 'scheda scheda-link', type: 'button', onclick: () => vai('come-si-legge') }, h('span', {}, h('strong', {}, 'Come si legge'), h('span', { class: 'sotto' }, 'Due minuti per capire aa, ii, uu e gli altri suoni')), icona('freccia')),
@@ -95,73 +106,102 @@ export function livelli(radice) {
   const sezioni = dati.tuttiILivelli().map((livello, i) => {
     const aperto = dati.livelloSbloccato(i);
     const avanzamento = dati.avanzamentoLivello(livello);
+
+    // Le mini-lezioni della stessa lezione stanno in una riga sola, con un pallino per parte.
+    const gruppi = [];
+    for (const lezione of livello.lezioni) {
+      const chiave = lezione.origine || lezione.id;
+      let gruppo = gruppi[gruppi.length - 1];
+      if (!gruppo || gruppo.chiave !== chiave) {
+        gruppo = { chiave, titolo: lezione.titoloBase || lezione.titolo, parti: [] };
+        gruppi.push(gruppo);
+      }
+      gruppo.parti.push(lezione);
+    }
+
+    const riga = (gruppo) => {
+      const n = gruppo.parti.length;
+      const fatte = gruppo.parti.filter(dati.lezioneFatta).length;
+      const tutteFatte = fatte === n;
+      const eProssima = Boolean(prossima && gruppo.parti.some((p) => p.id === prossima.lezione.id));
+      // Toccando si riparte dalla prima parte non ancora fatta (o dall'inizio, per rifarla).
+      const daFare = gruppo.parti.find((p) => !dati.lezioneFatta(p)) || gruppo.parti[0];
+      const voci = gruppo.parti.reduce((somma, p) => somma + p.voci.length, 0);
+      const stato_ = tutteFatte ? 'Fatta, tocca per rifarla' : eProssima ? `Parte ${fatte + 1} di ${n}, la prossima` : fatte > 0 ? `${fatte} di ${n} parti fatte` : `${plurale(voci, 'voce', 'voci')} in ${plurale(n, 'parte', 'parti')}`;
+      return h(
+        'li',
+        {},
+        h(
+          'button',
+          { class: 'lezione' + (tutteFatte ? ' fatta' : '') + (eProssima ? ' prossima' : ''), type: 'button', onclick: () => vai('lezione/' + daFare.id) },
+          h('span', { class: 'lezione-stato' }, tutteFatte ? icona('ok') : null),
+          h(
+            'span',
+            { class: 'lezione-testi' },
+            h('strong', {}, gruppo.titolo),
+            h('span', {}, stato_),
+            n > 1 ? h('span', { class: 'parti', 'aria-hidden': 'true' }, ...gruppo.parti.map((p) => h('span', { class: dati.lezioneFatta(p) ? 'piena' : '' }))) : null,
+          ),
+          icona('freccia'),
+        ),
+      );
+    };
+
     return h(
       'section',
       { class: 'scheda' + (aperto ? '' : ' bloccata') },
       h('div', { class: 'livello-testa' }, h('div', {}, h('p', { class: 'etichetta' }, `Livello ${i + 1}`), h('h2', {}, livello.titolo)), h('p', { class: 'livello-pct' }, aperto ? pct(avanzamento) : icona('lucchetto'))),
       livello.descrizione ? h('p', { class: 'sotto' }, livello.descrizione) : null,
       barra(avanzamento, `Avanzamento del livello ${i + 1}`),
-      aperto
-        ? h(
-            'ul',
-            { class: 'elenco-lezioni' },
-            ...livello.lezioni.map((lezione) => {
-              const fatta = dati.lezioneFatta(lezione);
-              const eProssima = Boolean(prossima && prossima.lezione.id === lezione.id);
-              return h(
-                'li',
-                {},
-                h(
-                  'button',
-                  { class: 'lezione' + (fatta ? ' fatta' : '') + (eProssima ? ' prossima' : ''), type: 'button', onclick: () => vai('lezione/' + lezione.id) },
-                  h('span', { class: 'lezione-stato' }, fatta ? icona('ok') : null),
-                  h('span', { class: 'lezione-testi' }, h('strong', {}, lezione.titolo), h('span', {}, `${plurale(lezione.voci.length, 'voce', 'voci')}${fatta ? ', fatta' : eProssima ? ', la prossima' : ''}`)),
-                  icona('freccia'),
-                ),
-              );
-            }),
-          )
-        : h('p', { class: 'suggerimento' }, `Si sblocca quando il livello ${i} è almeno all'80%.`),
+      aperto ? h('ul', { class: 'elenco-lezioni' }, ...gruppi.map(riga)) : h('p', { class: 'suggerimento' }, `Si sblocca quando "${dati.tuttiILivelli()[i - 1].titolo}" è almeno all'80%.`),
     );
   });
-  metti(radice, h('header', { class: 'testa' }, h('div', {}, h('h1', {}, 'Lezioni'), h('p', { class: 'sotto' }, 'I livelli si sbloccano in ordine. Puoi sempre rifare quelli già fatti.'))), ...sezioni);
+  metti(radice, h('header', { class: 'testa' }, h('div', {}, h('h1', {}, 'Lezioni'), h('p', { class: 'sotto' }, 'Ogni lezione è divisa in parti da tre voci. Tocca per riprendere da dove eri.'))), ...sezioni);
 }
 
 // ---------- Da ripassare ----------
 
 export function daRipassare(radice) {
+  const inScadenza = dati.vociDaRipassareOggi().length;
   const voci = dati.vociInListaRipasso();
   const elenco = h(
     'ul',
     { class: 'elenco-voci' },
-    ...voci.map((voce) => {
-      const riga = rigaVoce(
+    ...voci.map((voce) =>
+      rigaVoce(
         voce,
         h(
           'button',
           {
             class: 'btn-icona',
             type: 'button',
-            'aria-label': 'Togli dalla lista',
-            title: 'Togli dalla lista',
+            'aria-label': 'La so: togli dalla lista',
+            title: 'La so: togli dalla lista',
             onclick: () => {
               stato.togliDaRipassare(voce.id);
               daRipassare(radice);
-              window.dispatchEvent(new Event('progressi-cambiati'));
             },
           },
           icona('ok'),
         ),
-      );
-      return riga;
-    }),
+      ),
+    ),
   );
-  metti(radice, 
-    h('header', { class: 'testa' }, h('div', {}, h('h1', {}, 'Da ripassare'), h('p', { class: 'sotto' }, 'Le voci su cui sei stato incerto, quelle sbagliate e quelle che hai segnato tu.'))),
+  metti(
+    radice,
+    h('header', { class: 'testa' }, h('div', {}, h('h1', {}, 'Ripasso'), h('p', { class: 'sotto' }, 'Poco e spesso: è il ripasso che fa restare le parole.'))),
+    // Tutto il ripasso in un posto solo: prima quello in scadenza, poi le voci difficili.
+    h(
+      'section',
+      { class: 'scheda scheda-riga' },
+      h('div', {}, h('h2', {}, 'In scadenza oggi'), h('p', { class: 'sotto' }, inScadenza > 0 ? `${plurale(inScadenza, 'voce', 'voci')}, ${Math.min(inScadenza, 10)} alla volta` : 'Niente per ora. Torna più tardi o fai una lezione.')),
+      inScadenza > 0 ? h('button', { class: 'btn btn-primario btn-stretto', type: 'button', onclick: () => vai('ripasso') }, 'Ripassa') : null,
+    ),
+    h('h2', { class: 'titolo-sezione' }, 'Le tue voci difficili'),
     voci.length > 0
-      ? h('button', { class: 'btn btn-primario', type: 'button', onclick: () => vai('ripasso-lista') }, `Allenati su ${plurale(voci.length, 'voce', 'voci')}`)
-      : h('div', { class: 'scheda vuota' }, h('p', {}, 'La lista è vuota.'), h('p', { class: 'suggerimento' }, 'Qui finiscono le voci che sbagli o su cui sei incerto. Puoi anche aggiungerne a mano con "Segna da ripassare" su qualsiasi carta.')),
-    voci.length > 0 ? h('p', { class: 'suggerimento' }, 'Tocca ✓ per togliere una voce dalla lista quando la sai.') : null,
+      ? h('p', { class: 'suggerimento' }, 'Quelle sbagliate, incerte o segnate da te. Riascoltale qui; tocca il segno di spunta quando una la sai.')
+      : h('div', { class: 'scheda vuota' }, h('p', {}, 'Nessuna, per ora.'), h('p', { class: 'suggerimento' }, 'Qui finiscono le voci che sbagli o su cui sei incerto. Puoi aggiungerne a mano con "Segna da ripassare" su qualsiasi carta.')),
+    voci.length > 0 ? h('button', { class: 'btn btn-secondario', type: 'button', onclick: () => vai('ripasso-lista') }, `Allenati su queste ${voci.length}`) : null,
     elenco,
   );
 }
@@ -364,6 +404,30 @@ export function altro(radice, { applicaTema }) {
               onclick: () => {
                 stato.impostaTema(valore);
                 applicaTema();
+                altro(radice, { applicaTema });
+              },
+            },
+            nome,
+          ),
+        ),
+      ),
+    ),
+    h(
+      'section',
+      { class: 'scheda' },
+      h('p', { class: 'etichetta' }, 'Esercizio di pronuncia'),
+      h('p', { class: 'suggerimento' }, 'Alla fine di ogni lezione ripeti le parole al microfono. Serve internet e il permesso al microfono.'),
+      h(
+        'div',
+        { class: 'segmenti', role: 'group', 'aria-label': 'Esercizio di pronuncia' },
+        ...[[true, 'Attivo'], [false, 'Spento']].map(([valore, nome]) =>
+          h(
+            'button',
+            {
+              type: 'button',
+              'aria-pressed': String((stato.leggi().impostazioni.pronuncia !== false) === valore),
+              onclick: () => {
+                stato.impostaPronuncia(valore);
                 altro(radice, { applicaTema });
               },
             },

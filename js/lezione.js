@@ -11,7 +11,7 @@ import { h, metti, icona, vai, pulsantiAudio, segnalibro, barra, mescola, vibra 
 const PEGGIORA = { bene: 'incerto', incerto: 'male', male: 'male' };
 
 /** Quante voci al massimo in una sessione di ripasso (le sessioni devono restare brevi). */
-const MAX_RIPASSO = 20;
+const MAX_RIPASSO = 10;
 
 // ---------- Pezzi condivisi ----------
 
@@ -167,11 +167,14 @@ export function avviaLezione(radice, { lezione, livello }) {
   const voci = lezione.voci;
   const n = voci.length;
   let terminata = false;
+  // La pronuncia si fa solo se è attiva nelle impostazioni e il telefono ha il riconoscimento vocale.
+  const conPronuncia = stato.leggi().impostazioni.pronuncia !== false && riconoscimentoDisponibile();
+  const nFasi = conPronuncia ? 4 : 3;
   // Com'era il livello successivo prima di cominciare: serve per annunciare lo sblocco alla fine.
   const indiceLivello = dati.tuttiILivelli().indexOf(livello);
   const successivoEraAperto = dati.livelloSbloccato(indiceLivello + 1);
   const telaio = creaTelaio(radice, {
-    fasi: ['Scopri', 'Flashcard', 'Quiz', 'Pronuncia'],
+    fasi: conPronuncia ? ['Scopri', 'Flashcard', 'Quiz', 'Pronuncia'] : ['Scopri', 'Flashcard', 'Quiz'],
     domandaUscita: () => (terminata ? '' : 'Uscire dalla lezione? Le risposte date finora restano salvate, ma la lezione non risulterà completata.'),
   });
 
@@ -181,7 +184,7 @@ export function avviaLezione(radice, { lezione, livello }) {
   const pronuncia = { provate: 0, ottime: 0 };
 
   // La barra copre le quattro fasi, ciascuna lunga n passi.
-  const progresso = (fase, passo) => (fase * n + passo) / (n * 4);
+  const progresso = (fase, passo) => (fase * n + passo) / (n * nFasi);
 
   // --- 1. Scopri ---
   function scopri(i) {
@@ -295,6 +298,9 @@ export function avviaLezione(radice, { lezione, livello }) {
         parla(voce.devanagari);
         // Esito e "Avanti" insieme in basso, a portata di pollice.
         metti(telaio.azioni, riscontro, h('button', { class: 'btn btn-primario', type: 'button', onclick: domanda }, 'Avanti'));
+        // La risposta giusta resta visibile sopra il riquadro dell'esito.
+        const bottoneGiusto = bottoni[opzioni.findIndex((o) => o.id === voce.id)];
+        requestAnimationFrame(() => bottoneGiusto.scrollIntoView({ block: 'nearest', behavior: 'smooth' }));
       }
     }
     domanda();
@@ -302,6 +308,10 @@ export function avviaLezione(radice, { lezione, livello }) {
 
   // --- 4. Pronuncia ---
   function avviaPronuncia() {
+    if (!conPronuncia) {
+      fine();
+      return;
+    }
     if (!riconoscimentoDisponibile()) {
       notaPronuncia = 'L\'esercizio di pronuncia è stato saltato: questo browser non offre il riconoscimento vocale.';
       fine();
@@ -361,9 +371,11 @@ export function avviaLezione(radice, { lezione, livello }) {
       } catch (errore) {
         if (errore.codice === 'permesso' || errore.codice === 'rete') {
           // Microfono negato o servizio non raggiungibile: non si blocca la lezione.
+          // Senza permesso al microfono l'esercizio si spegne da solo: inutile riproporlo a ogni lezione.
+          if (errore.codice === 'permesso') stato.impostaPronuncia(false);
           notaPronuncia =
             errore.codice === 'permesso'
-              ? 'L\'esercizio di pronuncia è stato saltato: il microfono non è disponibile o manca il permesso.'
+              ? 'L\'esercizio di pronuncia è stato saltato: il microfono non è disponibile o manca il permesso. L\'ho disattivato: puoi riaccenderlo in Altro.'
               : 'L\'esercizio di pronuncia è stato saltato: il riconoscimento vocale ha bisogno di internet.';
           fine();
           return;

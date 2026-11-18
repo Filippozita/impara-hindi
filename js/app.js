@@ -31,7 +31,7 @@ function applicaTema() {
 const VOCI_NAV = [
   ['', 'Home', 'casa'],
   ['livelli', 'Lezioni', 'libro'],
-  ['da-ripassare', 'Ripassare', 'ripeti'],
+  ['da-ripassare', 'Ripasso', 'ripeti'],
   ['progressi', 'Progressi', 'grafico'],
   ['altro', 'Altro', 'altro'],
 ];

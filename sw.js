@@ -1,15 +1,16 @@
 // sw.js — service worker: tiene una copia dell'app sul telefono, così funziona offline.
 //
-// Strategia:
+// Strategia "prima la rete":
 //  - all'installazione scarica tutti i file dell'app;
-//  - contenuti.json: prima la rete (così i nuovi livelli arrivano subito), poi la copia salvata;
-//  - tutto il resto: subito la copia salvata, e intanto si aggiorna in sottofondo
-//    (le modifiche al codice si vedono alla seconda apertura).
+//  - a ogni apertura prova a prendere i file aggiornati dalla rete e aggiorna la copia salvata,
+//    così le novità si vedono subito, senza dover chiudere e riaprire;
+//  - se la rete manca, o non risponde entro ATTESA_MS, usa la copia salvata.
 //
 // Se aggiungi o rinomini un file dell'app, aggiornalo nell'elenco FILE e cambia VERSIONE.
 
-const VERSIONE = 'v8';
+const VERSIONE = 'v9';
 const CACHE = 'impara-hindi-' + VERSIONE;
+const ATTESA_MS = 2500;
 const FILE = [
   './',
   './index.html',
@@ -58,26 +59,34 @@ async function scaricaEAggiorna(richiesta) {
   return risposta;
 }
 
+/** Rifiuta se la promessa non si conclude entro `ms` (la promessa continua comunque in sottofondo). */
+function entro(promessa, ms) {
+  return new Promise((risolvi, rifiuta) => {
+    const timer = setTimeout(() => rifiuta(new Error('rete lenta')), ms);
+    promessa.then(
+      (valore) => {
+        clearTimeout(timer);
+        risolvi(valore);
+      },
+      (errore) => {
+        clearTimeout(timer);
+        rifiuta(errore);
+      },
+    );
+  });
+}
+
 self.addEventListener('fetch', (evento) => {
   const richiesta = evento.request;
   const url = new URL(richiesta.url);
   if (richiesta.method !== 'GET' || url.origin !== self.location.origin) return;
 
-  // Contenuti: rete prima, copia salvata se si è offline.
-  if (url.pathname.endsWith('/contenuti.json')) {
-    evento.respondWith(scaricaEAggiorna(richiesta).catch(() => caches.match(richiesta, { ignoreSearch: true })));
-    return;
-  }
-
-  // Tutto il resto: copia salvata subito, aggiornamento in sottofondo.
+  const dallaRete = scaricaEAggiorna(richiesta);
+  // Anche se si risponde con la copia salvata, lo scaricamento prosegue e la aggiorna.
+  evento.waitUntil(dallaRete.catch(() => {}));
   evento.respondWith(
-    caches.match(richiesta, { ignoreSearch: true }).then((salvata) => {
-      const dallaRete = scaricaEAggiorna(richiesta).catch(() => salvata);
-      if (salvata) {
-        evento.waitUntil(dallaRete);
-        return salvata;
-      }
-      return dallaRete;
-    }),
+    entro(dallaRete, ATTESA_MS)
+      .catch(() => caches.match(richiesta, { ignoreSearch: true }))
+      .then((risposta) => risposta || dallaRete),
   );
 });
