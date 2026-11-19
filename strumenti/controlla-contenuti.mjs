@@ -32,6 +32,17 @@ for (const livello of dati.livelli || []) {
     unico(lezione.id, 'lezione');
     if (!lezione.titolo) errori.push(`lezione ${lezione.id}: manca "titolo"`);
     const voci = lezione.voci || [];
+    // Dispensa: le celle si vedono (niente devanagari), "audio" è il testo letto dalla voce.
+    if (lezione.dispensa) {
+      const p = lezione.dispensa;
+      if (!Array.isArray(p.colonne) || !Array.isArray(p.righe)) errori.push(`dispensa di ${lezione.id}: servono "colonne" e "righe"`);
+      for (const riga of p.righe || []) {
+        if (!Array.isArray(riga.celle) || riga.celle.length < 2) errori.push(`dispensa di ${lezione.id}: ogni riga ha almeno due celle`);
+        if (DEVANAGARI.test((riga.celle || []).join(' '))) errori.push(`dispensa di ${lezione.id}: devanagari in una cella visibile`);
+        if (riga.audio && !DEVANAGARI.test(riga.audio)) errori.push(`dispensa di ${lezione.id}: "audio" deve essere in devanagari`);
+      }
+      if (DEVANAGARI.test((p.note || []).join(' ') + (p.titolo || ''))) errori.push(`dispensa di ${lezione.id}: devanagari nel titolo o nelle note`);
+    }
     if (voci.length < 4) errori.push(`lezione ${lezione.id}: servono almeno 4 voci (per le 4 risposte del quiz)`);
     for (const voce of voci) {
       totale += 1;

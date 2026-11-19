@@ -47,7 +47,7 @@ export function home(radice) {
   let posizione = '';
   if (prossima) {
     const numero = prossima.livello.lezioni.indexOf(prossima.lezione) + 1;
-    posizione = `Lezione ${numero} di ${prossima.livello.lezioni.length} in "${prossima.livello.titolo}", ${plurale(prossima.lezione.voci.length, 'voce', 'voci')}`;
+    posizione = `${prossima.livello.titolo}, ${plurale(prossima.lezione.voci.length, 'voce', 'voci')}`;
   }
 
   metti(
@@ -68,7 +68,7 @@ export function home(radice) {
       ? h(
           'section',
           { class: 'scheda scheda-riga' },
-          h('div', {}, h('h2', {}, 'Ripasso di oggi'), h('p', { class: 'sotto' }, `${plurale(daFare, 'voce', 'voci')} in scadenza, ${Math.min(daFare, 10)} alla volta`)),
+          h('div', {}, h('h2', {}, 'Ripasso di oggi'), h('p', { class: 'sotto' }, `${plurale(daFare, 'voce', 'voci')} in scadenza, ${Math.min(daFare, 8)} alla volta`)),
           h('button', { class: 'btn btn-primario btn-stretto', type: 'button', onclick: () => vai('ripasso') }, 'Ripassa'),
         )
       : null,
@@ -80,6 +80,7 @@ export function home(radice) {
           h('h2', {}, prossima.lezione.titolo),
           h('p', { class: 'sotto' }, posizione),
           h('button', { class: 'btn btn-primario', type: 'button', onclick: () => vai('lezione/' + prossima.lezione.id) }, iniziata ? 'Continua' : 'Inizia'),
+          h('button', { class: 'btn-testo btn-testo-chiaro', type: 'button', onclick: () => vai('dispensa/' + (prossima.lezione.origine || prossima.lezione.id)) }, 'Prima leggi la dispensa'),
         )
       : h('section', { class: 'scheda scheda-forte' }, h('h2', {}, 'Hai completato tutte le lezioni'), h('p', { class: 'sotto' }, 'Continua con il ripasso, oppure rifai una lezione.'), h('button', { class: 'btn btn-primario', type: 'button', onclick: () => vai('livelli') }, 'Vai alle lezioni')),
     // Solo la prima volta: come funziona, e una prova dell'audio prima di cominciare.
@@ -103,60 +104,99 @@ export function home(radice) {
 
 export function livelli(radice) {
   const prossima = dati.prossimaLezione();
+  const riga = (capitolo) => {
+    const { parti } = dati.trovaCapitolo(capitolo.id);
+    const n = parti.length;
+    const fatte = parti.filter(dati.lezioneFatta).length;
+    const tutteFatte = fatte === n;
+    const eProssimo = Boolean(prossima && parti.some((p) => p.id === prossima.lezione.id));
+    // Si riparte dalla prima lezione non ancora fatta (o dall'inizio, per rifare il capitolo).
+    const daFare = parti.find((p) => !dati.lezioneFatta(p)) || parti[0];
+    const studiate = capitolo.voci.filter((v) => stato.leggiVoce(v.id).scatola >= 1).length;
+    const testoStato = tutteFatte ? 'Capitolo completato' : fatte > 0 ? `Lezione ${fatte + 1} di ${n}` : `${plurale(capitolo.voci.length, 'voce', 'voci')} in ${plurale(n, 'lezione', 'lezioni')}`;
+    return h(
+      'li',
+      { class: 'capitolo' + (tutteFatte ? ' fatto' : '') + (eProssimo ? ' prossimo' : '') },
+      h(
+        'div',
+        { class: 'capitolo-testa' },
+        h('span', { class: 'lezione-stato' }, tutteFatte ? icona('ok') : null),
+        h(
+          'div',
+          { class: 'lezione-testi' },
+          h('strong', {}, capitolo.titolo),
+          h('span', {}, testoStato),
+          n > 1 ? h('span', { class: 'parti', 'aria-hidden': 'true' }, ...parti.map((p) => h('span', { class: dati.lezioneFatta(p) ? 'piena' : '' }))) : null,
+        ),
+      ),
+      h(
+        'div',
+        { class: 'capitolo-azioni' },
+        h('button', { class: 'btn btn-piccolo btn-secondario', type: 'button', onclick: () => vai('dispensa/' + capitolo.id) }, 'Dispensa'),
+        h('button', { class: 'btn btn-piccolo btn-secondario', type: 'button', disabled: studiate === 0, onclick: () => vai('ripasso-capitolo/' + capitolo.id) }, 'Ripasso'),
+        h('button', { class: 'btn btn-piccolo btn-primario', type: 'button', onclick: () => vai('lezione/' + daFare.id) }, tutteFatte ? 'Rifai' : fatte > 0 ? 'Continua' : 'Inizia'),
+      ),
+    );
+  };
   const sezioni = dati.tuttiILivelli().map((livello, i) => {
     const aperto = dati.livelloSbloccato(i);
     const avanzamento = dati.avanzamentoLivello(livello);
-
-    // Le mini-lezioni della stessa lezione stanno in una riga sola, con un pallino per parte.
-    const gruppi = [];
-    for (const lezione of livello.lezioni) {
-      const chiave = lezione.origine || lezione.id;
-      let gruppo = gruppi[gruppi.length - 1];
-      if (!gruppo || gruppo.chiave !== chiave) {
-        gruppo = { chiave, titolo: lezione.titoloBase || lezione.titolo, parti: [] };
-        gruppi.push(gruppo);
-      }
-      gruppo.parti.push(lezione);
-    }
-
-    const riga = (gruppo) => {
-      const n = gruppo.parti.length;
-      const fatte = gruppo.parti.filter(dati.lezioneFatta).length;
-      const tutteFatte = fatte === n;
-      const eProssima = Boolean(prossima && gruppo.parti.some((p) => p.id === prossima.lezione.id));
-      // Toccando si riparte dalla prima parte non ancora fatta (o dall'inizio, per rifarla).
-      const daFare = gruppo.parti.find((p) => !dati.lezioneFatta(p)) || gruppo.parti[0];
-      const voci = gruppo.parti.reduce((somma, p) => somma + p.voci.length, 0);
-      const stato_ = tutteFatte ? 'Fatta, tocca per rifarla' : eProssima ? `Parte ${fatte + 1} di ${n}, la prossima` : fatte > 0 ? `${fatte} di ${n} parti fatte` : `${plurale(voci, 'voce', 'voci')} in ${plurale(n, 'parte', 'parti')}`;
-      return h(
-        'li',
-        {},
-        h(
-          'button',
-          { class: 'lezione' + (tutteFatte ? ' fatta' : '') + (eProssima ? ' prossima' : ''), type: 'button', onclick: () => vai('lezione/' + daFare.id) },
-          h('span', { class: 'lezione-stato' }, tutteFatte ? icona('ok') : null),
-          h(
-            'span',
-            { class: 'lezione-testi' },
-            h('strong', {}, gruppo.titolo),
-            h('span', {}, stato_),
-            n > 1 ? h('span', { class: 'parti', 'aria-hidden': 'true' }, ...gruppo.parti.map((p) => h('span', { class: dati.lezioneFatta(p) ? 'piena' : '' }))) : null,
-          ),
-          icona('freccia'),
-        ),
-      );
-    };
-
     return h(
       'section',
       { class: 'scheda' + (aperto ? '' : ' bloccata') },
-      h('div', { class: 'livello-testa' }, h('div', {}, h('p', { class: 'etichetta' }, `Livello ${i + 1}`), h('h2', {}, livello.titolo)), h('p', { class: 'livello-pct' }, aperto ? pct(avanzamento) : icona('lucchetto'))),
+      h('div', { class: 'livello-testa' }, h('div', {}, h('p', { class: 'etichetta' }, `Parte ${i + 1}`), h('h2', {}, livello.titolo)), h('p', { class: 'livello-pct' }, aperto ? pct(avanzamento) : icona('lucchetto'))),
       livello.descrizione ? h('p', { class: 'sotto' }, livello.descrizione) : null,
-      barra(avanzamento, `Avanzamento del livello ${i + 1}`),
-      aperto ? h('ul', { class: 'elenco-lezioni' }, ...gruppi.map(riga)) : h('p', { class: 'suggerimento' }, `Si sblocca quando "${dati.tuttiILivelli()[i - 1].titolo}" è almeno all'80%.`),
+      barra(avanzamento, `Avanzamento della parte ${i + 1}`),
+      aperto ? h('ul', { class: 'elenco-capitoli' }, ...livello.capitoli.map(riga)) : h('p', { class: 'suggerimento' }, `Si sblocca quando "${dati.tuttiILivelli()[i - 1].titolo}" è almeno all'80%.`),
     );
   });
-  metti(radice, h('header', { class: 'testa' }, h('div', {}, h('h1', {}, 'Lezioni'), h('p', { class: 'sotto' }, 'Ogni lezione è divisa in parti da tre voci. Tocca per riprendere da dove eri.'))), ...sezioni);
+  metti(radice, h('header', { class: 'testa' }, h('div', {}, h('h1', {}, 'Lezioni'), h('p', { class: 'sotto' }, 'Ogni capitolo ha una dispensa da leggere, lezioni da tre voci e un ripasso.'))), ...sezioni);
+}
+
+// ---------- Dispensa di un capitolo ----------
+
+/** La dispensa: regole, tabella riassuntiva e tutte le voci del capitolo, sempre con l'audio. */
+export function dispensa(radice, idCapitolo) {
+  const trovato = dati.trovaCapitolo(idCapitolo);
+  if (!trovato) {
+    vai('livelli');
+    return;
+  }
+  const { capitolo, parti } = trovato;
+  const tabella = capitolo.dispensa;
+  const daFare = parti.find((p) => !dati.lezioneFatta(p)) || parti[0];
+  const tutteFatte = parti.every(dati.lezioneFatta);
+  const colonne = tabella ? tabella.colonne || [] : [];
+  // Ogni riga: la prima cella è l'italiano, la seconda la forma hindi principale, le altre dettagli.
+  const rigaTabella = (riga) =>
+    h(
+      'li',
+      {},
+      h(
+        'div',
+        { class: 'tab-testi' },
+        h('p', { class: 'tab-it' }, riga.celle[0]),
+        h('p', { class: 'tab-hi', lang: 'hi-Latn' }, colonne[1] && colonne[1] !== 'Hindi' ? h('span', { class: 'tab-nome' }, colonne[1] + ' ') : null, riga.celle[1]),
+        ...riga.celle.slice(2).map((cella, k) => h('p', { class: 'tab-extra' }, h('span', { class: 'tab-nome' }, (colonne[k + 2] || '') + ' '), h('span', { lang: 'hi-Latn' }, cella))),
+      ),
+      riga.audio ? h('button', { class: 'btn btn-audio', type: 'button', 'aria-label': 'Ascolta', onclick: () => parla(riga.audio) }, icona('audio')) : null,
+    );
+  metti(
+    radice,
+    h('header', { class: 'testa' }, h('div', {}, h('button', { class: 'btn-testo indietro', type: 'button', onclick: () => vai('livelli') }, '‹ Lezioni'), h('h1', {}, capitolo.titolo), h('p', { class: 'sotto' }, 'Dispensa: leggila, ascoltala, torna qui quando vuoi.'))),
+    capitolo.spiegazione ? h('section', { class: 'scheda' }, h('p', { class: 'etichetta' }, 'La regola'), ...capitolo.spiegazione.split('\n').filter(Boolean).map((riga) => h('p', {}, riga))) : null,
+    tabella
+      ? h(
+          'section',
+          { class: 'scheda' },
+          h('p', { class: 'etichetta' }, tabella.titolo || 'Tabella'),
+          h('ul', { class: 'tabella' }, ...tabella.righe.map(rigaTabella)),
+          ...(tabella.note || []).map((nota) => h('p', { class: 'carta-nota' }, nota)),
+        )
+      : null,
+    h('section', {}, h('h2', { class: 'titolo-sezione' }, 'Tutte le voci del capitolo'), h('ul', { class: 'elenco-voci' }, ...capitolo.voci.map((v) => rigaVoce(v)))),
+    h('button', { class: 'btn btn-primario', type: 'button', onclick: () => vai('lezione/' + daFare.id) }, tutteFatte ? 'Rifai le lezioni' : 'Vai alla lezione'),
+  );
 }
 
 // ---------- Da ripassare ----------
@@ -194,7 +234,7 @@ export function daRipassare(radice) {
     h(
       'section',
       { class: 'scheda scheda-riga' },
-      h('div', {}, h('h2', {}, 'In scadenza oggi'), h('p', { class: 'sotto' }, inScadenza > 0 ? `${plurale(inScadenza, 'voce', 'voci')}, ${Math.min(inScadenza, 10)} alla volta` : 'Niente per ora. Torna più tardi o fai una lezione.')),
+      h('div', {}, h('h2', {}, 'In scadenza oggi'), h('p', { class: 'sotto' }, inScadenza > 0 ? `${plurale(inScadenza, 'voce', 'voci')}, ${Math.min(inScadenza, 8)} alla volta` : 'Niente per ora. Torna più tardi o fai una lezione.')),
       inScadenza > 0 ? h('button', { class: 'btn btn-primario btn-stretto', type: 'button', onclick: () => vai('ripasso') }, 'Ripassa') : null,
     ),
     h('h2', { class: 'titolo-sezione' }, 'Le tue voci difficili'),
@@ -256,9 +296,9 @@ export function progressi(radice) {
       'section',
       { class: 'scheda' },
       h('p', { class: 'etichetta' }, 'Voce per voce'),
-      h('p', { class: 'suggerimento' }, 'Tocca una lezione per vedere a che punto è ogni parola o frase.'),
+      h('p', { class: 'suggerimento' }, 'Tocca un capitolo per vedere a che punto è ogni parola o frase.'),
       ...dati.tuttiILivelli().flatMap((livello) =>
-        livello.lezioni.map((lezione) => {
+        livello.capitoli.map((lezione) => {
           const sapute = lezione.voci.filter((v) => stato.leggiVoce(v.id).scatola >= stato.SCATOLA_IMPARATA).length;
           const viste = lezione.voci.filter((v) => stato.leggiVoce(v.id).scatola >= 1).length;
           return h(

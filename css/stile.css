@@ -1337,3 +1337,186 @@ details summary {
 .btn-opzione {
   scroll-margin-bottom: 13rem;
 }
+
+/* ---------- Capitoli (pagina Lezioni) ---------- */
+.elenco-capitoli {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin-top: 0.2rem;
+}
+.capitolo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  padding: 0.8rem;
+  border: 2px solid transparent;
+  border-radius: 1.1rem;
+  background: var(--sfondo);
+}
+.capitolo.prossimo {
+  border-color: var(--azione);
+  background: var(--carta);
+}
+.capitolo-testa {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+.capitolo.prossimo .lezione-stato {
+  border-color: var(--azione);
+  background: var(--azione);
+}
+.capitolo.fatto .lezione-stato {
+  border-color: var(--ok);
+  background: var(--ok);
+  color: var(--carta);
+}
+.capitolo-azioni {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1.1fr;
+  gap: 0.4rem;
+}
+.btn-piccolo {
+  min-height: 2.9rem;
+  padding: 0.4rem 0.3rem;
+  border-radius: 0.9rem;
+  font-size: 0.92rem;
+}
+.btn-piccolo.btn-primario {
+  box-shadow: 0 3px 0 var(--azione-ombra);
+}
+.btn:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+.btn-testo-chiaro {
+  color: #ffffff;
+  text-align: center;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+/* ---------- Dispensa ---------- */
+.tabella {
+  display: flex;
+  flex-direction: column;
+}
+.tabella li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+  padding: 0.75rem 0;
+  border-top: 1px solid var(--bordo);
+}
+.tabella li:first-child {
+  border-top: none;
+  padding-top: 0.2rem;
+}
+.tab-testi {
+  min-width: 0;
+}
+.tab-it {
+  font-size: 0.9rem;
+  color: var(--tenue);
+}
+.tab-hi {
+  font-size: 1.35rem;
+  font-weight: 800;
+  line-height: 1.2;
+  color: var(--accento);
+  overflow-wrap: anywhere;
+}
+.tab-extra {
+  font-size: 0.98rem;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+.tab-nome {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--tenue);
+}
+.tabella .btn-audio {
+  width: 3rem;
+  min-height: 3rem;
+  padding: 0;
+  border-radius: 50%;
+  flex: none;
+}
+.scheda > .carta-nota {
+  text-align: left;
+}
+
+/* ---------- Abbina: due colonne di parole ---------- */
+.abbina {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.6rem;
+}
+.abbina-colonna {
+  display: grid;
+  grid-auto-rows: 1fr;
+  gap: 0.55rem;
+}
+.btn-coppia,
+.coppia-vuota {
+  min-height: 4.4rem;
+  border-radius: 1.1rem;
+}
+.btn-coppia {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 0.45rem;
+  border: 2px solid var(--bordo);
+  border-bottom-width: 4px;
+  background: var(--carta);
+  font-weight: 700;
+  font-size: 0.98rem;
+  line-height: 1.2;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+.coppia-hi {
+  color: var(--accento);
+  font-weight: 800;
+  font-size: 1.05rem;
+}
+.btn-coppia.scelta {
+  border-color: var(--forte);
+  background: var(--accento-tenue);
+}
+.btn-coppia.giusta {
+  border-color: var(--ok);
+  background: var(--ok-sfondo);
+  color: var(--ok);
+}
+.btn-coppia.sbagliata {
+  border-color: var(--no);
+  background: var(--no-sfondo);
+  color: var(--no);
+  animation: scuoti 0.3s ease;
+}
+:root[data-tema='scuro'] .btn-coppia.scelta {
+  border-color: var(--accento);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-tema='chiaro']) .btn-coppia.scelta {
+    border-color: var(--accento);
+  }
+}
+@keyframes scuoti {
+  25% {
+    transform: translateX(-5px);
+  }
+  75% {
+    transform: translateX(5px);
+  }
+}
+/* Nell'Abbina le caselle non si muovono a ogni tocco. */
+.es-corpo > .abbina,
+.es-corpo > .abbina ~ * {
+  animation: none;
+}

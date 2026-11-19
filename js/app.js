@@ -40,7 +40,7 @@ function disegnaNav(percorso) {
   const inLista = dati.vociInListaRipasso().length;
   nav.replaceChildren(
     ...VOCI_NAV.map(([dove, nome, simbolo]) => {
-      const attiva = percorso === dove || (dove === 'altro' && percorso === 'come-si-legge');
+      const attiva = percorso === dove || (dove === 'altro' && percorso === 'come-si-legge') || (dove === 'livelli' && percorso === 'dispensa');
       return h(
         'a',
         { href: '#/' + dove, class: attiva ? 'attiva' : '', 'aria-current': attiva ? 'page' : null },
@@ -80,7 +80,7 @@ function mostra() {
   if (pulizia) pulizia();
   pulizia = null;
   zittisci();
-  const [percorso, parametro] = window.location.hash.replace(/^#\/?/, '').split('/');
+  const [percorso, parametro] = window.location.hash.replace(/^#\/?/, '').split('/').map(decodeURIComponent);
   let aTuttoSchermo = false;
   radice.replaceChildren();
   window.scrollTo(0, 0);
@@ -104,6 +104,21 @@ function mostra() {
     case 'ripasso-lista':
       aTuttoSchermo = true;
       pulizia = avviaRipasso(radice, dati.vociInListaRipasso(), { titolo: 'Da ripassare' });
+      break;
+    case 'ripasso-capitolo': {
+      const trovato = dati.trovaCapitolo(parametro);
+      if (!trovato) {
+        vai('livelli');
+        return;
+      }
+      aTuttoSchermo = true;
+      // Si ripassano le voci già studiate; se non ce ne sono ancora, tutte.
+      const studiate = trovato.capitolo.voci.filter((v) => stato.leggiVoce(v.id).scatola >= 1);
+      pulizia = avviaRipasso(radice, studiate.length > 0 ? studiate : trovato.capitolo.voci, { titolo: 'Ripasso: ' + trovato.capitolo.titolo, ritorno: 'livelli' });
+      break;
+    }
+    case 'dispensa':
+      schermate.dispensa(radice, parametro);
       break;
     case 'livelli':
       schermate.livelli(radice);

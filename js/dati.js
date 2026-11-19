@@ -1,71 +1,90 @@
 // dati.js — carica contenuti.json e offre le domande più comuni sui contenuti e sui progressi.
-// Tutto ciò che riguarda livelli, lezioni e voci passa da qui: il resto dell'app non conosce il file.
+// Tutto ciò che riguarda parti, capitoli, lezioni e voci passa da qui.
+//
+// Nomi usati nell'app:
+//   livello  = una "Parte" (Le fondamenta, I verbi, Le parole)
+//   capitolo = una "lezione" di contenuti.json: ha un titolo, una dispensa e 5–10 voci
+//   lezione  = una mini-lezione: un pezzo di capitolo da poche voci, creato qui in automatico
 
 import * as stato from './stato.js';
 
 let livelli = [];
 let glossario = {}; // parola traslitterata → significato italiano
 const vociPerId = new Map();
-const lezioniPerId = new Map();
+const lezioniPerId = new Map(); // id mini-lezione → { lezione, livello }
+const capitoliPerId = new Map(); // id capitolo → { capitolo, livello, parti }
+const contestoPerVoce = new Map(); // id voce → { capitolo, livello }
 
-/** Percentuale minima del livello precedente per sbloccare il successivo. */
+/** Percentuale minima del livello precedente per sbloccare il successivo (se non è "aperto"). */
 export const SOGLIA_SBLOCCO = 0.8;
 
 /** Quante voci al massimo in una mini-lezione: poche, così si ricordano. */
 export const MAX_VOCI_PER_LEZIONE = 3;
 
 /**
- * Spezza una lezione dei contenuti in parti da al massimo MAX_VOCI_PER_LEZIONE voci,
- * il più possibile uguali (10 voci → 3, 3, 2, 2). Ogni parte è una lezione a sé, con id
- * "idOriginale~numero"; la spiegazione resta sulla prima parte.
+ * Spezza un capitolo in mini-lezioni da al massimo MAX_VOCI_PER_LEZIONE voci, il più possibile
+ * uguali (10 voci → 3, 3, 2, 2). Ogni parte ha id "idCapitolo~numero"; la spiegazione resta sulla prima.
  */
-function dividi(lezione) {
-  const voci = lezione.voci || [];
-  const parti = Math.ceil(voci.length / MAX_VOCI_PER_LEZIONE);
-  if (parti <= 1) return [lezione];
-  const risultato = [];
+function dividi(capitolo) {
+  const voci = capitolo.voci || [];
+  const quanteParti = Math.max(1, Math.ceil(voci.length / MAX_VOCI_PER_LEZIONE));
+  const parti = [];
   let inizio = 0;
-  for (let k = 0; k < parti; k++) {
-    const quante = Math.ceil((voci.length - inizio) / (parti - k));
-    risultato.push({
-      id: `${lezione.id}~${k + 1}`,
-      origine: lezione.id,
-      titoloBase: lezione.titolo,
-      titolo: `${lezione.titolo} ${k + 1}/${parti}`,
-      spiegazione: k === 0 ? lezione.spiegazione : undefined,
+  for (let k = 0; k < quanteParti; k++) {
+    const quante = Math.ceil((voci.length - inizio) / (quanteParti - k));
+    parti.push({
+      id: quanteParti === 1 ? capitolo.id : `${capitolo.id}~${k + 1}`,
+      origine: capitolo.id,
+      titoloBase: capitolo.titolo,
+      titolo: quanteParti === 1 ? capitolo.titolo : `${capitolo.titolo} ${k + 1}/${quanteParti}`,
+      spiegazione: k === 0 ? capitolo.spiegazione : undefined,
       voci: voci.slice(inizio, inizio + quante),
     });
     inizio += quante;
   }
-  return risultato;
+  return parti;
 }
 
-/** Una mini-lezione è fatta se è stata completata lei, oppure (prima della divisione) la lezione intera. */
+/** Una mini-lezione è fatta se è stata completata lei, oppure (prima della divisione) il capitolo intero. */
 export const lezioneFatta = (lezione) => stato.lezioneCompletata(lezione.id) || Boolean(lezione.origine && stato.lezioneCompletata(lezione.origine));
 
 export async function caricaContenuti() {
   const risposta = await fetch('./contenuti.json');
   if (!risposta.ok) throw new Error('Impossibile caricare i contenuti.');
   const dati = await risposta.json();
-  livelli = Array.isArray(dati.livelli) ? dati.livelli : [];
-  // Le lezioni dei contenuti vengono spezzate in mini-lezioni da poche voci.
-  livelli = livelli.map((livello) => ({ ...livello, lezioni: (livello.lezioni || []).flatMap(dividi) }));
   glossario = dati.glossario && typeof dati.glossario === 'object' ? dati.glossario : {};
   vociPerId.clear();
   lezioniPerId.clear();
-  for (const livello of livelli) {
-    for (const lezione of livello.lezioni || []) {
-      lezioniPerId.set(lezione.id, { lezione, livello });
-      for (const voce of lezione.voci || []) vociPerId.set(voce.id, voce);
-    }
-  }
+  capitoliPerId.clear();
+  contestoPerVoce.clear();
+  // I livelli con "nascosto": true restano nel file ma non compaiono nell'app.
+  livelli = (Array.isArray(dati.livelli) ? dati.livelli : [])
+    .filter((l) => !l.nascosto)
+    .map((originale) => {
+      const livello = { ...originale, capitoli: originale.lezioni || [], lezioni: [] };
+      for (const capitolo of livello.capitoli) {
+        const parti = dividi(capitolo);
+        capitoliPerId.set(capitolo.id, { capitolo, livello, parti });
+        for (const lezione of parti) {
+          livello.lezioni.push(lezione);
+          lezioniPerId.set(lezione.id, { lezione, livello });
+        }
+        for (const voce of capitolo.voci || []) {
+          vociPerId.set(voce.id, voce);
+          contestoPerVoce.set(voce.id, { capitolo, livello });
+        }
+      }
+      return livello;
+    });
 }
 
 export const tuttiILivelli = () => livelli;
 export const tutteLeVoci = () => [...vociPerId.values()];
 export const voce = (id) => vociPerId.get(id);
 export const trovaLezione = (id) => lezioniPerId.get(id); // → { lezione, livello } oppure undefined
-export const vociDelLivello = (livello) => livello.lezioni.flatMap((l) => l.voci);
+export const trovaCapitolo = (id) => capitoliPerId.get(id); // → { capitolo, livello, parti } oppure undefined
+export const contestoVoce = (id) => contestoPerVoce.get(id); // → { capitolo, livello } oppure undefined
+export const vociDelLivello = (livello) => livello.capitoli.flatMap((c) => c.voci);
 
 /** Quota (0–1) delle voci del livello già studiate almeno una volta. */
 export function avanzamentoLivello(livello) {
@@ -75,15 +94,14 @@ export function avanzamentoLivello(livello) {
   return studiate / voci.length;
 }
 
-/** Il primo livello è sempre aperto; gli altri quando il precedente è almeno all'80%. */
+/** Aperto se è il primo, se ha "aperto": true, o se il precedente è almeno all'80%. */
 export function livelloSbloccato(indice) {
   if (indice <= 0) return true;
-  // Un livello con "aperto": true nei contenuti è sempre disponibile.
   if (livelli[indice] && livelli[indice].aperto === true) return true;
   return livelloSbloccato(indice - 1) && avanzamentoLivello(livelli[indice - 1]) >= SOGLIA_SBLOCCO;
 }
 
-/** La prossima lezione non ancora completata tra i livelli sbloccati. */
+/** La prossima mini-lezione non ancora completata tra i livelli sbloccati. */
 export function prossimaLezione() {
   for (let i = 0; i < livelli.length; i++) {
     if (!livelloSbloccato(i)) break;
@@ -94,7 +112,7 @@ export function prossimaLezione() {
   return null;
 }
 
-/** La lezione che viene dopo quella indicata (anche nel livello successivo, se sbloccato). */
+/** La mini-lezione che viene dopo quella indicata (anche nel livello successivo, se sbloccato). */
 export function lezioneSuccessiva(idLezione) {
   const elenco = [];
   livelli.forEach((livello, i) => {
