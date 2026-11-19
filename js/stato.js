@@ -237,3 +237,23 @@ export function impostaPronuncia(attiva) {
   stato.impostazioni.pronuncia = Boolean(attiva);
   salva();
 }
+
+// ---------- Punti e obiettivo del giorno ----------
+
+/** Aggiunge punti alla giornata di oggi. */
+export function aggiungiPunti(quanti) {
+  const giorno = giornoDiOggi();
+  giorno.punti = (giorno.punti || 0) + quanti;
+  salva();
+}
+
+export const puntiOggi = () => (stato.giorni[oggi()] && stato.giorni[oggi()].punti) || 0;
+export const puntiTotali = () => Object.values(stato.giorni).reduce((somma, g) => somma + (g.punti || 0), 0);
+
+/** Quanti punti al giorno ci si è dati come obiettivo (si cambia in Altro). */
+export const obiettivo = () => Number(stato.impostazioni.obiettivo) || 30;
+
+export function impostaObiettivo(punti) {
+  stato.impostazioni.obiettivo = punti;
+  salva();
+}

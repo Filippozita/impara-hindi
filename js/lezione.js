@@ -22,7 +22,20 @@ const PEGGIORA = { bene: 'incerto', incerto: 'male', male: 'male' };
 /** Dal numero di errori su una voce al voto per la ripetizione spaziata. */
 const votoDaErrori = (errori) => (errori === 0 ? 'bene' : errori === 1 ? 'incerto' : 'male');
 
+/** Punti: una lezione, il bonus se è tutta giusta al primo colpo, la base di un ripasso. */
+const PUNTI_LEZIONE = 10;
+const PUNTI_BONUS = 5;
+const PUNTI_RIPASSO = 5;
+
 // ---------- Pezzi condivisi ----------
+
+/** A fine sessione: quanto manca all'obiettivo del giorno. */
+function rigaObiettivo() {
+  const punti = stato.puntiOggi();
+  const obiettivo = stato.obiettivo();
+  const testo = punti >= obiettivo ? 'Obiettivo di oggi raggiunto: ' + punti + ' punti' : 'Obiettivo di oggi: ' + punti + ' di ' + obiettivo + ' punti';
+  return h('div', { class: 'riga-obiettivo' }, barra(punti / obiettivo, 'Obiettivo di oggi'), h('p', { class: 'sotto' }, testo));
+}
 
 /** Struttura a tutto schermo: intestazione con chiusura e avanzamento, corpo, pulsanti in basso. */
 function creaTelaio(radice, { domandaUscita, fasi }) {
@@ -255,16 +268,50 @@ function distrattori(voce) {
 }
 
 /**
- * Quiz misto, una domanda per voce: italiano→hindi, hindi→italiano, ascolto→significato.
+ * Parole "intruse" per gli esercizi sulle frasi: parole hindi che NON fanno parte della voce,
+ * prese prima dal suo capitolo, poi dalla sua parte, poi da tutto.
+ */
+function paroleIntruse(voce, quante) {
+  const proprie = new Set((dati.scomposizione(voce) || []).map((p) => p.translit.toLowerCase()));
+  const contesto = dati.contestoVoce(voce.id);
+  const gruppi = [contesto ? contesto.capitolo.voci : [], contesto ? dati.vociDelLivello(contesto.livello) : [], dati.tutteLeVoci()];
+  const scelte = [];
+  const viste = new Set();
+  for (const gruppo of gruppi) {
+    const pezzi = mescola(gruppo).flatMap((v) => dati.scomposizione(v) || (/\s/.test(v.translit.trim()) ? [] : [{ translit: v.translit.replace(/[?!.,]/g, ''), devanagari: v.devanagari }]));
+    for (const pezzo of mescola(pezzi)) {
+      const chiave = pezzo.translit.toLowerCase();
+      if (scelte.length >= quante) return scelte;
+      if (proprie.has(chiave) || viste.has(chiave)) continue;
+      viste.add(chiave);
+      scelte.push(pezzo);
+    }
+  }
+  return scelte;
+}
+
+/** Gli esercizi adatti a una voce: le frasi si compongono e si completano, le parole si scelgono. */
+function tipiPer(voce) {
+  const conAudio = audioUtilizzabile(); // senza voce hindi niente esercizi d'ascolto
+  const parole = dati.scomposizione(voce);
+  if (parole && parole.length >= 2 && parole.length <= 6) return conAudio ? ['componi', 'completa', 'ascolta-componi', 'it-hi'] : ['componi', 'completa', 'it-hi'];
+  return conAudio ? ['it-hi', 'hi-it', 'ascolto'] : ['it-hi', 'hi-it'];
+}
+
+/**
+ * Quiz misto, una domanda per voce. Per le parole: italiano→hindi, hindi→italiano, ascolto→significato.
+ * Per le frasi anche: componi la frase, trova la parola mancante, ascolta e componi.
  * Una voce sbagliata torna una volta in fondo.
  *  - alProgresso(fatte, totale, ripetuta): prima di ogni domanda
  *  - allaRisposta(voce, giusta, ripetuta): dopo ogni risposta
  *  - alTermine(): finite le domande
  */
 function quiz(telaio, voci, { alProgresso, allaRisposta, alTermine }) {
-  // Senza una voce hindi le domande di ascolto non avrebbero senso: si usano solo le altre.
-  const tipi = audioUtilizzabile() ? ['it-hi', 'hi-it', 'ascolto'] : ['it-hi', 'hi-it'];
-  const coda = mescola(voci).map((voce, i) => ({ voce, tipo: tipi[i % tipi.length], ripetuta: false }));
+  let giro = Math.floor(Math.random() * 4); // punto di partenza diverso a ogni sessione, per variare
+  const coda = mescola(voci).map((voce) => {
+    const tipi = tipiPer(voce);
+    return { voce, tipo: tipi[giro++ % tipi.length], ripetuta: false };
+  });
   const totale = voci.length;
   let fatte = 0;
 
@@ -276,44 +323,10 @@ function quiz(telaio, voci, { alProgresso, allaRisposta, alTermine }) {
     }
     const { voce, tipo, ripetuta } = coda.shift();
     alProgresso(fatte, totale, ripetuta);
-    const versoHindi = tipo === 'it-hi';
-    const opzioni = mescola([voce, ...distrattori(voce)]);
-    const intestazione =
-      tipo === 'it-hi'
-        ? [h('p', { class: 'carta-etichetta' }, 'Come si dice in hindi?'), h('p', { class: 'carta-it' }, voce.it)]
-        : tipo === 'hi-it'
-          ? [h('p', { class: 'carta-etichetta' }, 'Cosa significa?'), h('p', { class: 'carta-hi', lang: 'hi-Latn' }, voce.translit), pulsantiAudio(voce, { compatti: true })]
-          : [h('p', { class: 'carta-etichetta' }, 'Ascolta e scegli il significato'), pulsantiAudio(voce)];
     const riscontro = h('div', { class: 'riscontro', role: 'status' });
-    const bottoni = opzioni.map((opzione) =>
-      h('button', { class: 'btn btn-opzione', type: 'button', lang: versoHindi ? 'hi-Latn' : null, onclick: () => rispondi(opzione) }, versoHindi ? opzione.translit : opzione.it),
-    );
-    metti(
-      telaio.corpo,
-      h('div', { class: 'carta carta-domanda' }, ...intestazione),
-      // Quando le risposte sono in hindi, accanto a ognuna c'è un altoparlante:
-      // si può ascoltare ogni opzione quante volte si vuole prima di sceglierla.
-      versoHindi ? h('p', { class: 'suggerimento centrato' }, 'Tocca l\'altoparlante per ascoltare, la scritta per rispondere.') : null,
-      h(
-        'div',
-        { class: 'opzioni' },
-        ...bottoni.map((bottone, k) =>
-          versoHindi
-            ? h('div', { class: 'opzione-riga' }, bottone, h('button', { class: 'btn btn-audio btn-ascolta-opzione', type: 'button', 'aria-label': 'Ascolta ' + opzioni[k].translit, onclick: () => parla(opzioni[k].devanagari) }, icona('audio')))
-            : bottone,
-        ),
-      ),
-    );
-    metti(telaio.azioni);
-    if (tipo === 'ascolto') parla(voce.devanagari);
 
-    function rispondi(scelta) {
-      const giusta = scelta.id === voce.id;
-      bottoni.forEach((b, k) => {
-        b.disabled = true;
-        if (opzioni[k].id === voce.id) b.classList.add('giusta');
-        else if (opzioni[k].id === scelta.id) b.classList.add('sbagliata');
-      });
+    /** Chiude la domanda: registra l'esito e mostra in basso la soluzione con "Avanti". */
+    function concludi(giusta, daTenereInVista) {
       // Una voce sbagliata torna una volta in fondo alla coda.
       if (!giusta && !ripetuta) coda.push({ voce, tipo, ripetuta: true });
       if (!ripetuta) fatte += 1;
@@ -322,11 +335,139 @@ function quiz(telaio, voci, { alProgresso, allaRisposta, alTermine }) {
       riscontro.className = 'riscontro ' + (giusta ? 'riscontro-ok' : 'riscontro-no');
       metti(riscontro, h('p', { class: 'riscontro-titolo' }, giusta ? 'Giusto' : 'Era questa'), h('p', {}, h('strong', { lang: 'hi-Latn' }, voce.translit), ' = ', voce.it));
       parla(voce.devanagari);
-      // Esito e "Avanti" insieme in basso, a portata di pollice.
       metti(telaio.azioni, riscontro, h('button', { class: 'btn btn-primario', type: 'button', onclick: domanda }, 'Avanti'));
-      // La risposta giusta resta visibile sopra il riquadro dell'esito.
-      const bottoneGiusto = bottoni[opzioni.findIndex((o) => o.id === voce.id)];
-      requestAnimationFrame(() => bottoneGiusto.scrollIntoView({ block: 'nearest', behavior: 'smooth' }));
+      if (daTenereInVista) requestAnimationFrame(() => daTenereInVista.scrollIntoView({ block: 'nearest', behavior: 'smooth' }));
+    }
+
+    if (tipo === 'componi' || tipo === 'ascolta-componi') domandaComponi(tipo === 'ascolta-componi');
+    else if (tipo === 'completa') domandaCompleta();
+    else domandaScelta();
+
+    // --- Componi la frase: si toccano le parole nell'ordine giusto ---
+    function domandaComponi(soloAscolto) {
+      const giuste = dati.scomposizione(voce);
+      const banco = mescola([...giuste, ...paroleIntruse(voce, 2)]).map((p) => ({ ...p, usata: false }));
+      const risposta = []; // le tessere scelte, in ordine
+      let chiusa = false;
+      const zonaRisposta = h('div', { class: 'componi-risposta' });
+      const zonaBanco = h('div', { class: 'componi-banco' });
+      const controlla = h('button', { class: 'btn btn-primario', type: 'button', onclick: verifica }, 'Controlla');
+
+      function disegna() {
+        metti(
+          zonaRisposta,
+          risposta.length === 0 ? h('span', { class: 'componi-vuoto' }, 'Tocca le parole nell\'ordine giusto') : null,
+          ...risposta.map((t) => h('button', { class: 'tessera', type: 'button', lang: 'hi-Latn', disabled: chiusa, 'aria-label': 'Togli ' + t.translit, onclick: () => togli(t) }, t.translit)),
+        );
+        metti(zonaBanco, ...banco.map((t) => h('button', { class: 'tessera' + (t.usata ? ' usata' : ''), type: 'button', lang: 'hi-Latn', disabled: t.usata || chiusa, onclick: () => aggiungi(t) }, t.translit)));
+        controlla.disabled = risposta.length === 0;
+      }
+      function aggiungi(tessera) {
+        tessera.usata = true;
+        risposta.push(tessera);
+        parla(tessera.devanagari); // ogni parola si sente quando la tocchi
+        disegna();
+      }
+      function togli(tessera) {
+        tessera.usata = false;
+        risposta.splice(risposta.indexOf(tessera), 1);
+        disegna();
+      }
+      function verifica() {
+        const frase = (pezzi) => pezzi.map((p) => p.translit.toLowerCase()).join(' ');
+        const giusta = frase(risposta) === frase(giuste);
+        chiusa = true;
+        zonaRisposta.classList.add(giusta ? 'giusta' : 'sbagliata');
+        disegna();
+        concludi(giusta);
+      }
+
+      metti(
+        telaio.corpo,
+        h('div', { class: 'carta carta-domanda' }, soloAscolto ? [h('p', { class: 'carta-etichetta' }, 'Ascolta e componi la frase'), pulsantiAudio(voce)] : [h('p', { class: 'carta-etichetta' }, 'Componi la frase'), h('p', { class: 'carta-it' }, voce.it)]),
+        zonaRisposta,
+        zonaBanco,
+      );
+      metti(telaio.azioni, controlla);
+      disegna();
+      if (soloAscolto) parla(voce.devanagari);
+    }
+
+    // --- Parola mancante: la frase ha un buco, si sceglie la parola che ci va ---
+    function domandaCompleta() {
+      const parole = dati.scomposizione(voce);
+      const intruse = paroleIntruse(voce, 3);
+      if (intruse.length === 0) {
+        domandaScelta();
+        return;
+      }
+      const buco = Math.floor(Math.random() * parole.length);
+      const opzioni = mescola([parole[buco], ...intruse]);
+      const spazio = h('span', { class: 'buco' }, ' ');
+      const frase = h('p', { class: 'carta-hi carta-hi-frase', lang: 'hi-Latn' }, ...parole.flatMap((p, i) => [i === buco ? spazio : p.translit, ' ']));
+      const bottoni = opzioni.map((opzione) => h('button', { class: 'btn btn-opzione', type: 'button', lang: 'hi-Latn', onclick: () => rispondi(opzione) }, opzione.translit));
+      metti(
+        telaio.corpo,
+        h('div', { class: 'carta carta-domanda' }, h('p', { class: 'carta-etichetta' }, 'Quale parola manca?'), h('p', { class: 'carta-it' }, voce.it), frase),
+        h(
+          'div',
+          { class: 'opzioni' },
+          ...bottoni.map((bottone, k) => h('div', { class: 'opzione-riga' }, bottone, h('button', { class: 'btn btn-audio btn-ascolta-opzione', type: 'button', 'aria-label': 'Ascolta ' + opzioni[k].translit, onclick: () => parla(opzioni[k].devanagari) }, icona('audio')))),
+        ),
+      );
+      metti(telaio.azioni);
+
+      function rispondi(scelta) {
+        const giusta = scelta === parole[buco];
+        bottoni.forEach((b, k) => {
+          b.disabled = true;
+          if (opzioni[k] === parole[buco]) b.classList.add('giusta');
+          else if (opzioni[k] === scelta) b.classList.add('sbagliata');
+        });
+        spazio.textContent = parole[buco].translit;
+        spazio.classList.add('riempito');
+        concludi(giusta, bottoni[opzioni.indexOf(parole[buco])]);
+      }
+    }
+
+    // --- Scelta multipla: italiano→hindi, hindi→italiano, ascolto→significato ---
+    function domandaScelta() {
+      const versoHindi = tipo !== 'hi-it' && tipo !== 'ascolto';
+      const opzioni = mescola([voce, ...distrattori(voce)]);
+      const intestazione = versoHindi
+        ? [h('p', { class: 'carta-etichetta' }, 'Come si dice in hindi?'), h('p', { class: 'carta-it' }, voce.it)]
+        : tipo === 'hi-it'
+          ? [h('p', { class: 'carta-etichetta' }, 'Cosa significa?'), h('p', { class: 'carta-hi', lang: 'hi-Latn' }, voce.translit), pulsantiAudio(voce, { compatti: true })]
+          : [h('p', { class: 'carta-etichetta' }, 'Ascolta e scegli il significato'), pulsantiAudio(voce)];
+      const bottoni = opzioni.map((opzione) => h('button', { class: 'btn btn-opzione', type: 'button', lang: versoHindi ? 'hi-Latn' : null, onclick: () => rispondi(opzione) }, versoHindi ? opzione.translit : opzione.it));
+      metti(
+        telaio.corpo,
+        h('div', { class: 'carta carta-domanda' }, ...intestazione),
+        // Quando le risposte sono in hindi, accanto a ognuna c'è un altoparlante:
+        // si può ascoltare ogni opzione quante volte si vuole prima di sceglierla.
+        versoHindi ? h('p', { class: 'suggerimento centrato' }, 'Tocca l\'altoparlante per ascoltare, la scritta per rispondere.') : null,
+        h(
+          'div',
+          { class: 'opzioni' },
+          ...bottoni.map((bottone, k) =>
+            versoHindi
+              ? h('div', { class: 'opzione-riga' }, bottone, h('button', { class: 'btn btn-audio btn-ascolta-opzione', type: 'button', 'aria-label': 'Ascolta ' + opzioni[k].translit, onclick: () => parla(opzioni[k].devanagari) }, icona('audio')))
+              : bottone,
+          ),
+        ),
+      );
+      metti(telaio.azioni);
+      if (tipo === 'ascolto') parla(voce.devanagari);
+
+      function rispondi(scelta) {
+        const giusta = scelta.id === voce.id;
+        bottoni.forEach((b, k) => {
+          b.disabled = true;
+          if (opzioni[k].id === voce.id) b.classList.add('giusta');
+          else if (opzioni[k].id === scelta.id) b.classList.add('sbagliata');
+        });
+        concludi(giusta, bottoni[opzioni.findIndex((o) => o.id === voce.id)]);
+      }
     }
   }
   domanda();
@@ -504,6 +645,8 @@ export function avviaLezione(radice, { lezione, livello }) {
     }
     stato.completaLezione(lezione.id);
     stato.registraSessione();
+    const punti = PUNTI_LEZIONE + (sapute === n ? PUNTI_BONUS : 0);
+    stato.aggiungiPunti(punti);
 
     const livelloNuovo = dati.tuttiILivelli()[indiceLivello + 1];
     const appenaSbloccato = livelloNuovo && !successivoEraAperto && dati.livelloSbloccato(indiceLivello + 1);
@@ -517,8 +660,10 @@ export function avviaLezione(radice, { lezione, livello }) {
         'div',
         { class: 'carta carta-fine' },
         h('p', { class: 'carta-etichetta' }, lezione.titolo),
-        h('p', { class: 'fine-numero' }, `${sapute} su ${n}`),
-        h('p', {}, sapute === n ? 'Tutte giuste al primo colpo. Shaabaash! (Bravo!)' : 'voci giuste al primo colpo'),
+        h('p', { class: 'fine-numero' }, '+' + punti),
+        h('p', {}, 'punti'),
+        h('p', { class: 'sotto' }, sapute === n ? 'Tutte giuste al primo colpo: 5 punti in più. Shaabaash! (Bravo!)' : sapute + ' su ' + n + ' giuste al primo colpo'),
+        rigaObiettivo(),
         pronuncia.provate > 0 ? h('p', { class: 'suggerimento' }, `Pronuncia: ${pronuncia.ottime} "ottimo" su ${pronuncia.provate} tentativi.`) : null,
       ),
       capitoloFinito ? h('div', { class: 'banner banner-ok' }, h('strong', {}, 'Capitolo completato: '), capitolo.capitolo.titolo, '. Fai il ripasso del capitolo per fissarlo.') : null,
@@ -566,9 +711,14 @@ export function avviaRipasso(radice, vociDaFare, { titolo, ritorno = '' }) {
   const erroriAbbina = new Map();
   const conteggio = { bene: 0, incerto: 0, male: 0 };
   let terminata = false;
+  let puntiRipasso = 0;
 
   function fine() {
-    if (!terminata && n > 0) stato.registraSessione();
+    if (!terminata && n > 0) {
+      stato.registraSessione();
+      puntiRipasso = PUNTI_RIPASSO + conteggio.bene;
+      stato.aggiungiPunti(puntiRipasso);
+    }
     terminata = true;
     const rimaste = vociDaFare.length - n;
     telaio.imposta(titolo, 1);
@@ -580,6 +730,8 @@ export function avviaRipasso(radice, vociDaFare, { titolo, ritorno = '' }) {
         h('p', { class: 'carta-etichetta' }, titolo),
         h('p', { class: 'fine-numero' }, n === 0 ? '0' : `${conteggio.bene} su ${n}`),
         h('p', {}, n === 0 ? 'Niente da ripassare per ora. Torna più tardi o fai una lezione nuova.' : 'voci ricordate senza errori'),
+        n > 0 ? h('p', { class: 'punti-riga' }, '+' + puntiRipasso + ' punti') : null,
+        n > 0 ? rigaObiettivo() : null,
         conteggio.incerto + conteggio.male > 0 ? h('p', { class: 'suggerimento' }, `${conteggio.incerto + conteggio.male} tornano nel ripasso: le rivedrai presto.`) : null,
         rimaste > 0 ? h('p', { class: 'suggerimento' }, `Ne restano altre ${rimaste} per un'altra sessione.`) : null,
       ),

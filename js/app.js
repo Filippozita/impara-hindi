@@ -30,7 +30,7 @@ function applicaTema() {
 
 const VOCI_NAV = [
   ['', 'Home', 'casa'],
-  ['livelli', 'Lezioni', 'libro'],
+  ['livelli', 'Percorso', 'libro'],
   ['da-ripassare', 'Ripasso', 'ripeti'],
   ['progressi', 'Progressi', 'grafico'],
   ['altro', 'Altro', 'altro'],
@@ -66,7 +66,7 @@ function disegnaStriscia() {
     h(
       'span',
       { class: 'striscia-centro' },
-      h('span', { class: 'striscia-testo' }, h('strong', {}, `${studiate} di ${tutte.length}`), ` studiate · ${imparate} imparate · ${oggi.minuti} min oggi`),
+      h('span', { class: 'striscia-testo' }, h('strong', {}, `${studiate} di ${tutte.length}`), ` voci · oggi ${stato.puntiOggi()} di ${stato.obiettivo()} punti`),
       // Barra a due toni: chiaro = studiate, pieno = imparate.
       h('span', { class: 'barra-doppia' }, h('span', { class: 'barra-studiate', style: `width:${(studiate / totale) * 100}%` }), h('span', { class: 'barra-imparate', style: `width:${(imparate / totale) * 100}%` })),
     ),
